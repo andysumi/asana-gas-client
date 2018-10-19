@@ -22,6 +22,20 @@
       return this.fetch_(Utilities.formatString('/tasks/%d', taskId), { 'method': 'get' });
     };
 
+    AsanaClient.prototype.searchTask = function (workspaceId, params) {
+      var id = workspaceId || this.workspaceId;
+      var parameter = this.buildUrlParam_(params);
+      return this.fetch_(Utilities.formatString('/workspaces/%d/tasks/search?%s', id, parameter), { 'method': 'get' });
+    };
+
+    AsanaClient.prototype.buildUrlParam_ = function (options) {
+      var params = [];
+      for (var key in options) {
+        params.push(Utilities.formatString('%s=%s', key, encodeURIComponent(options[key])));
+      }
+      return params.join('&');
+    };
+
     AsanaClient.prototype.fetch_ = function (endPoint, options) {
       var url = this.apiUrl + endPoint;
       var response = UrlFetchApp.fetch(url, {

@@ -35,3 +35,14 @@ function getTasksInProject(projectId) { // eslint-disable-line no-unused-vars
 function getSpecificTask(taskId) { // eslint-disable-line no-unused-vars
   throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
 }
+
+/**
+ * Taskを検索する
+ * https://asana.com/developers/documentation/getting-started/search-api
+ * @param {Integer} workspaceId 【任意】ワークスペースID
+ * @param {Object} params 【任意】パラメーター
+ * @return {Object} Taskのオブジェクト
+ */
+function searchTask(workspaceId, params) { // eslint-disable-line no-unused-vars
+  throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
+}
