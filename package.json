@@ -1,0 +1,25 @@
+{
+  "name": "asana-gas-client",
+  "version": "1.0.0",
+  "description": "Google Apps Script用のAsana APIライブラリ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andysumi/asana-gas-client.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/andysumi/asana-gas-client/issues"
+  },
+  "homepage": "https://github.com/andysumi/asana-gas-client#readme",
+  "devDependencies": {
+    "@google/clasp": "^1.6.3",
+    "eslint": "^5.7.0",
+    "eslint-plugin-googleappsscript": "^1.0.1"
+  }
+}
