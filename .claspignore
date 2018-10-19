@@ -1,0 +1,6 @@
+# src及びtest以下のソースファイルのみpushする
+**/**
+!src/*
+!test/*
+
+!appsscript.json
