@@ -26,3 +26,12 @@ function getProjectsInWorkspace(workspaceId) { // eslint-disable-line no-unused-
 function getTasksInProject(projectId) { // eslint-disable-line no-unused-vars
   throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
 }
+
+/**
+ * Taskの情報を取得する
+ * @param {Integer} taskId 【必須】タスクID
+ * @return {Object} Taskのオブジェクト
+ */
+function getSpecificTask(taskId) { // eslint-disable-line no-unused-vars
+  throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
+}

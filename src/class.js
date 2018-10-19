@@ -18,6 +18,10 @@
       return this.fetch_(Utilities.formatString('/projects/%d/tasks', id), { 'method': 'get' });
     };
 
+    AsanaClient.prototype.getSpecificTask = function (taskId) {
+      return this.fetch_(Utilities.formatString('/tasks/%d', taskId), { 'method': 'get' });
+    };
+
     AsanaClient.prototype.fetch_ = function (endPoint, options) {
       var url = this.apiUrl + endPoint;
       var response = UrlFetchApp.fetch(url, {
