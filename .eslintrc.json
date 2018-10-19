@@ -10,7 +10,8 @@
     "googleappsscript/googleappsscript": true
   },
   "globals": {
-    "console": false
+    "console": false,
+    "AsanaClient": false
   },
   "rules": {
     "semi": "warn",
