@@ -1,0 +1,82 @@
+version: 2
+
+references:
+  container_config: &container_config
+    working_directory: ~/project
+    docker:
+      - image: circleci/node:8.12.0
+
+  create-clasp-files: &create-clasp-files
+    run:
+        name: create clasp setting files
+        command: |
+          echo $CRASP_AUTH > ~/.clasprc.json
+          echo $CRASP_CONFIG > .clasp.json
+jobs:
+  test:
+    <<: *container_config
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - dependency-cache-{{ checksum "package.json" }}
+            - dependency-cache-
+      - run: npm install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+      - run:
+          name: Lint check
+          command: npx eslint src
+
+  upload:
+    <<: *container_config
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - *create-clasp-files
+      - run:
+          name: upload files
+          command: npx clasp push
+
+  deploy:
+    <<: *container_config
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - *create-clasp-files
+      - run:
+          name: create version
+          command: |
+            change_log=$(tail -1 version_history | sed -e "s/^[0-9]*[[:blank:]]-[[:blank:]]\(.*\)$/\1/g")
+            npx clasp version $change_log
+workflows:
+  version: 2
+
+  test-and-deploy:
+    jobs:
+      - test:
+          filters:
+            branches:
+              only: /.*/
+            tags:
+              only: /.*/
+      - upload:
+          requires:
+            - test
+          filters:
+            branches:
+              only: master
+            tags:
+              only: /.*/
+      - deploy:
+          requires:
+            - upload
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
