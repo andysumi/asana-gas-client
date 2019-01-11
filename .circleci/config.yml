@@ -1,70 +1,131 @@
-version: 2
+version: 2.1
 
-references:
-  container_config: &container_config
+executors:
+  default:
     working_directory: ~/project
     docker:
-      - image: circleci/node:8.12.0
+      - image: circleci/node:10.15
 
-  create-clasp-files: &create-clasp-files
-    run:
-        name: create clasp setting files
-        command: |
-          echo $CRASP_AUTH > ~/.clasprc.json
-          echo $CRASP_CONFIG > .clasp.json
-jobs:
-  test:
-    <<: *container_config
+commands:
+  restore_npm:
     steps:
-      - checkout
       - restore_cache:
+          name: restore npm dependencies
           keys:
             - dependency-cache-{{ checksum "package.json" }}
             - dependency-cache-
-      - run: npm install
+  save_npm:
+    steps:
       - save_cache:
+          name: cache npm dependencies
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - node_modules
+  create_clasp_files:
+    parameters:
+      env:
+        type: string
+    steps:
       - run:
-          name: Lint check
-          command: npx eslint src
+          name: create << parameters.env >> clasp setting files
+          command: |
+            echo ${CRASP_AUTH} > ~/.clasprc.json
+            echo ${CRASP_CONFIG_<< parameters.env >>} > .clasp.json
 
-  upload:
-    <<: *container_config
+jobs:
+  setup:
+    executor:
+      name: default
     steps:
       - checkout
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-      - *create-clasp-files
+      - restore_npm
+      - run:
+          name: install dependencies
+          command: npm install
+      - save_npm
+  test:
+    executor:
+      name: default
+    steps:
+      - checkout
+      - restore_npm
+      - run:
+          name: run lint check
+          command: npx eslint src
+  upload:
+    parameters:
+      env:
+        type: string
+    executor:
+      name: default
+    steps:
+      - checkout
+      - restore_npm
+      - create_clasp_files:
+          env: << parameters.env >>
       - run:
           name: upload files
-          command: npx clasp push
-
+          command: npx @google/clasp push
   deploy:
-    <<: *container_config
+    parameters:
+      env:
+        type: string
+      env_is_prop:
+        type: boolean
+    executor:
+      name: default
     steps:
       - checkout
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-      - *create-clasp-files
-      - run:
-          name: create version
-          command: |
-            change_log=$(tail -1 version_history | sed -e "s/^[0-9]*[[:blank:]]-[[:blank:]]\(.*\)$/\1/g")
-            npx clasp version $change_log
-workflows:
-  version: 2
+      - restore_npm
+      - create_clasp_files:
+          env: << parameters.env >>
+      - when:
+          condition: << parameters.env_is_prop >>
+          steps:
+            - run:
+                name: create version
+                command: |
+                  change_log=$(tail -1 version_history | sed -e "s/^[0-9]*[[:blank:]]-[[:blank:]]\(.*\)$/\1/g")
+                  npx @google/clasp version ${change_log}
+      - unless:
+          condition: << parameters.env_is_prop >>
+          steps:
+            - run:
+                name: create version
+                command: |
+                  change_log="development"
+                  npx @google/clasp version ${change_log}
 
-  test-and-deploy:
+workflows:
+  test_and_deploy:
     jobs:
+      - setup:
+          filters:
+            branches:
+              only: /.*/
+            tags:
+              only: /.*/
       - test:
+          requires:
+            - setup
           filters:
             branches:
               only: /.*/
             tags:
               only: /.*/
       - upload:
+          name: upload_dev
+          env: DEV
+          requires:
+            - test
+          filters:
+            branches:
+              only: /.*/
+            tags:
+              only: /.*/
+      - upload:
+          name: upload_prod
+          env: PROD
           requires:
             - test
           filters:
@@ -73,10 +134,24 @@ workflows:
             tags:
               only: /.*/
       - deploy:
+          name: deploy_dev
+          env: DEV
+          env_is_prop: false
           requires:
-            - upload
+            - upload_dev
           filters:
+            branches:
+              only: /.*/
             tags:
-              only: /^v.*/
+              only: /.*/
+      - deploy:
+          name: deploy_prod
+          env: PROD
+          env_is_prop: true
+          requires:
+            - upload_prod
+          filters:
             branches:
               ignore: /.*/
+            tags:
+              only: /^v.*/
