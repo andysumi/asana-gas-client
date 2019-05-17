@@ -13,6 +13,11 @@
       return this.fetch_(Utilities.formatString('/workspaces/%d/projects', id), { 'method': 'get' });
     };
 
+    AsanaClient.prototype.getSpecificProject = function (projectId) {
+      var id = projectId || this.projectId;
+      return this.fetch_(Utilities.formatString('/projects/%d', id), { 'method': 'get' });
+    };
+
     AsanaClient.prototype.getTasksInProject = function (projectId) {
       var id = projectId || this.projectId;
       return this.fetch_(Utilities.formatString('/projects/%d/tasks', id), { 'method': 'get' });

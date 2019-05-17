@@ -19,6 +19,15 @@ function getProjectsInWorkspace(workspaceId) { // eslint-disable-line no-unused-
 }
 
 /**
+ * Projectの情報を取得する
+ * @param {Integer} projectId 【任意】プロジェクトID
+ * @return {Object} Projectのオブジェクト
+ */
+function getSpecificProject(projectId) { // eslint-disable-line no-unused-vars
+  throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
+}
+
+/**
  * Project内のTaskを取得する
  * @param {Integer} projectId 【任意】プロジェクトID
  * @return {Object} Taskのオブジェクト
