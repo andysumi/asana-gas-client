@@ -33,6 +33,13 @@
       return this.fetch_(Utilities.formatString('/workspaces/%d/tasks/search?%s', id, parameter), { 'method': 'get' });
     };
 
+    AsanaClient.prototype.countProjectTasks = function (projectId, fields) {
+      if (!fields) throw new Error('"fields"は必須です');
+      var id = projectId || this.projectId;
+      var res = this.fetch_(Utilities.formatString('/projects/%s/task_counts?opt_fields=%s', id, fields.join(',')), { 'method': 'get' });
+      return res.data;
+    };
+
     AsanaClient.prototype.buildUrlParam_ = function (options) {
       var params = [];
       for (var key in options) {

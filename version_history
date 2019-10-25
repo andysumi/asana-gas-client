@@ -1,3 +1,4 @@
 1 - 新規作成
 2 - searchTaskメソッドを追加
 4 - getSpecificProjectメソッドを追加
+5 - countProjectTasksメソッドを追加
