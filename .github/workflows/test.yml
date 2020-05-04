@@ -1,0 +1,42 @@
+name: Test
+
+on:
+  push:
+    branches-ignore:
+      - 'master'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node Version
+        run: |
+          echo "Node $(node -v)"
+          echo "Npm $(npm -v)"
+      - name: Cache Node.js modules
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: npm ci
+      - name: Run lint check
+        run: npm test
+      - uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          author_name: ${{ github.workflow }}
+          username: Github Actions
+          icon_emoji: ':github:'
+          channel: '#github_notify'
+          mention: here
+          if_mention: failure,cancelled
+          text: '<https://github.com/${{ github.repository }}/commit/${{ github.sha }}/checks|${{ job.status }}>: <https://github.com/${{ github.repository }}/actions?query=workflow:${{ github.workflow }}|${{ github.workflow }} Workflow> executed by ${{ github.actor }} in <https://github.com/${{ github.repository }}|${{ github.repository }}>'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: always()
