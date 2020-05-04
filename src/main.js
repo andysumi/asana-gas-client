@@ -1,12 +1,27 @@
 /**
  * Asana Clientのインスタンスを作成する
  * @param {string} token 【必須】アクセストークン
- * @param {?number} workspaceId 【任意】ワークスペースID
- * @param {?number} projectId 【任意】プロジェクトID
+ * @param {?number} workspaceId 【任意】Workspace ID
+ * @param {?number} teamId 【任意】Team ID
+ * @param {?number} projectId 【任意】Project ID
  * @return {AsanaClient} Asana Clientのインスタンス
  */
-function create(token, workspaceId, projectId) { // eslint-disable-line no-unused-vars
-  return new AsanaClient(token, workspaceId, projectId);
+function create(token, workspaceId, teamId, projectId) { // eslint-disable-line no-unused-vars
+  return new AsanaClient(token, workspaceId, teamId, projectId);
+}
+
+/**
+ * 認証したユーザーに表示されるすべてのWorkspaceを取得する
+ * @param {?Object} params
+ *   @param {?boolean} params.opt_pretty
+ *   @param {?Array<string>} params.opt_fields
+ *   @param {?number} params.limit
+ *   @param {?string} params.offset
+ * @return {Object} Workspaceのオブジェクト
+ * https://developers.asana.com/docs/get-multiple-workspaces
+ */
+function getAllWorkspaces(params) { // eslint-disable-line no-unused-vars
+  throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
 }
 
 /**

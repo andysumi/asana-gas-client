@@ -4,7 +4,7 @@
   "description": "Google Apps Script用のAsana APIライブラリ",
   "main": "index.js",
   "scripts": {
-    "test": "eslint src -c .eslintrc.json --fix",
+    "test": "eslint src test -c .eslintrc.json --fix",
     "push": "npm run test && clasp push -f"
   },
   "repository": {
