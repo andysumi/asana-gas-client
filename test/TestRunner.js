@@ -11,6 +11,7 @@ function TestRunner() { // eslint-disable-line no-unused-vars
   try {
     /***** Test cases ******************************/
     testGetAllWorkspaces(test, common);
+    testGetSpecificWorkspace(test, common);
     /***********************************************/
   } catch (err) {
     test('Exception occurred', function f(assert) {
@@ -35,8 +36,23 @@ function testGetAllWorkspaces(test, common) {
   test('getAllWorkspaces() - 正常系', function (t) {
     var result = client.getAllWorkspaces();
     t.ok(result instanceof Object, 'Objectで取得できること');
-    t.ok(Object.prototype.hasOwnProperty.call(result[0], 'gid'), '"gid"を含むこと');
-    t.ok(Object.prototype.hasOwnProperty.call(result[0], 'name'), '"name"を含むこと');
     t.equal(result[0].resource_type, 'workspace', 'resource_typeが"workspace"であること');
+  });
+}
+
+function testGetSpecificWorkspace(test, common) {
+  var client = common.getClientUser();
+
+  test('getSpecificWorkspace() - 正常系(idなし)', function (t) {
+    var result = client.getSpecificWorkspace();
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.equal(result.resource_type, 'workspace', 'resource_typeが"workspace"であること');
+  });
+
+  test('getSpecificWorkspace() - 正常系(idあり)', function (t) {
+    var id = common.workspaceId;
+    var result = client.getSpecificWorkspace(id);
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.equal(result.resource_type, 'workspace', 'resource_typeが"workspace"であること');
   });
 }

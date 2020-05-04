@@ -1,9 +1,9 @@
 /**
  * Asana Clientのインスタンスを作成する
- * @param {string} token 【必須】アクセストークン
- * @param {?number} workspaceId 【任意】Workspace ID
- * @param {?number} teamId 【任意】Team ID
- * @param {?number} projectId 【任意】Project ID
+ * @param {string} token 【必須】
+ * @param {?string} workspaceId
+ * @param {?string} teamId
+ * @param {?string} projectId
  * @return {AsanaClient} Asana Clientのインスタンス
  */
 function create(token, workspaceId, teamId, projectId) { // eslint-disable-line no-unused-vars
@@ -11,7 +11,7 @@ function create(token, workspaceId, teamId, projectId) { // eslint-disable-line 
 }
 
 /**
- * 認証したユーザーに表示されるすべてのWorkspaceを取得する
+ * 認証したユーザーに表示されるすべてのWorkspaceの情報を取得する
  * @param {?Object} params
  *   @param {?boolean} params.opt_pretty
  *   @param {?Array<string>} params.opt_fields
@@ -21,6 +21,19 @@ function create(token, workspaceId, teamId, projectId) { // eslint-disable-line 
  * https://developers.asana.com/docs/get-multiple-workspaces
  */
 function getAllWorkspaces(params) { // eslint-disable-line no-unused-vars
+  throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
+}
+
+/**
+ * 指定したWorkspaceの情報を取得する
+ * @param {?string} workspaceId
+ * @param {?Object} params
+ *   @param {?boolean} params.opt_pretty
+ *   @param {?Array<string>} params.opt_fields
+ * @return {Object} Workspaceのオブジェクト
+ * https://developers.asana.com/docs/get-a-workspace
+ */
+function getSpecificWorkspace(workspaceId, params) { // eslint-disable-line no-unused-vars
   throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
 }
 

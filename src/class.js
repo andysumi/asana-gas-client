@@ -14,6 +14,10 @@
     AsanaClient.prototype.getAllWorkspaces = function (params) {
       return this.fetch_(Utilities.formatString('/workspaces?%s', this.buildUrlParam_(params)), { 'method': 'get' });
     };
+    AsanaClient.prototype.getSpecificWorkspace = function (workspaceId, params) {
+      var id = workspaceId || this.workspaceId;
+      return this.fetch_(Utilities.formatString('/workspaces/%s?%s', id, this.buildUrlParam_(params)), { 'method': 'get' });
+    };
 
     AsanaClient.prototype.getProjectsInWorkspace = function (workspaceId) {
       var id = workspaceId || this.workspaceId;
