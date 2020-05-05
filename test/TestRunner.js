@@ -20,6 +20,7 @@ function TestRunner_() { // eslint-disable-line no-unused-vars
     testGetAllProjects_(test, common);
     testGetSpecificProject_(test, common);
     testGetProjectsInTeam_(test, common);
+    testGetProjectsInWorkspace_(test, common);
     /***********************************************/
   } catch (err) {
     test('Exception occurred', function f(assert) {
@@ -171,6 +172,28 @@ function testGetProjectsInTeam_(test, common) {
     var isArchived = false;
     var limit = 3;
     var result = client.getProjectsInTeam(teamId, isArchived, { limit: limit });
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(result.data.length === limit, '"limit"で指定した要素の数が取得できること');
+    t.equal(result.data[0].resource_type, 'project', 'resource_typeが"project"であること');
+    t.ok(Object.prototype.hasOwnProperty.call(result, 'next_page'), '"next_page"を含むこと');
+  });
+}
+
+function testGetProjectsInWorkspace_(test, common) {
+  var client = common.getClientUser();
+
+  test('getProjectsInWorkspace() - 正常系(paramsなし)', function (t) {
+    var result = client.getProjectsInWorkspace();
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(result.data.length > 1, '"1"以上の要素を含むこと');
+    t.equal(result.data[0].resource_type, 'project', 'resource_typeが"project"であること');
+  });
+
+  test('getProjectsInWorkspace() - 正常系(paramsあり)', function (t) {
+    var workspaceId = common.workspaceId;
+    var isArchived = false;
+    var limit = 3;
+    var result = client.getProjectsInWorkspace(workspaceId, isArchived, { limit: limit });
     t.ok(result instanceof Object, 'Objectで取得できること');
     t.ok(result.data.length === limit, '"limit"で指定した要素の数が取得できること');
     t.equal(result.data[0].resource_type, 'project', 'resource_typeが"project"であること');

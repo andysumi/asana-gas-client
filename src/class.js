@@ -49,10 +49,11 @@
       if (isArchived != null) parameter['archived'] = isArchived;
       return this.fetch_(Utilities.formatString('/teams/%s/projects?%s', id, this.buildUrlParam_(_.extend(parameter, params))), { 'method': 'get' });
     };
-
-    AsanaClient.prototype.getProjectsInWorkspace = function (workspaceId) {
+    AsanaClient.prototype.getProjectsInWorkspace = function (workspaceId, isArchived, params) {
       var id = workspaceId || this.workspaceId;
-      return this.fetch_(Utilities.formatString('/workspaces/%d/projects', id), { 'method': 'get' });
+      var parameter = {};
+      if (isArchived != null) parameter['archived'] = isArchived;
+      return this.fetch_(Utilities.formatString('/workspaces/%d/projects?%s', id, this.buildUrlParam_(_.extend(parameter, params))), { 'method': 'get' });
     };
 
     AsanaClient.prototype.getTasksInProject = function (projectId) {
