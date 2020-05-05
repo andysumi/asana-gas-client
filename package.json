@@ -4,7 +4,8 @@
   "description": "Google Apps Script用のAsana APIライブラリ",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "eslint src test -c .eslintrc.json --fix",
+    "push": "npm run test && clasp push -f"
   },
   "repository": {
     "type": "git",
@@ -18,8 +19,8 @@
   },
   "homepage": "https://github.com/andysumi/asana-gas-client#readme",
   "devDependencies": {
-    "@google/clasp": "^1.7.0",
-    "eslint": "^5.12.0",
-    "eslint-plugin-googleappsscript": "^1.0.1"
+    "@google/clasp": "^2.3.0",
+    "eslint": "^6.8.0",
+    "eslint-plugin-googleappsscript": "^1.0.3"
   }
 }

@@ -1,12 +1,23 @@
 (function (global) {
   var AsanaClient = (function () {
-    function AsanaClient(token, workspaceId, projectId) {
+    function AsanaClient(token, workspaceId, teamId, projectId) {
+      if (!token) throw new Error('"token"は必須です');
+
       this.apiUrl = 'https://app.asana.com/api/1.0';
       this.headers = { 'Authorization': 'Bearer ' + token };
       this.workspaceId = workspaceId;
+      this.teamId = teamId;
       this.projectId = projectId;
-      if (!token) throw new Error('"token"は必須です');
     }
+
+    // Workspaces
+    AsanaClient.prototype.getAllWorkspaces = function (params) {
+      return this.fetch_(Utilities.formatString('/workspaces?%s', this.buildUrlParam_(params)), { 'method': 'get' });
+    };
+    AsanaClient.prototype.getSpecificWorkspace = function (workspaceId, params) {
+      var id = workspaceId || this.workspaceId;
+      return this.fetch_(Utilities.formatString('/workspaces/%s?%s', id, this.buildUrlParam_(params)), { 'method': 'get' });
+    };
 
     AsanaClient.prototype.getProjectsInWorkspace = function (workspaceId) {
       var id = workspaceId || this.workspaceId;
@@ -40,24 +51,30 @@
       return res.data;
     };
 
-    AsanaClient.prototype.buildUrlParam_ = function (options) {
-      var params = [];
-      for (var key in options) {
-        params.push(Utilities.formatString('%s=%s', key, encodeURIComponent(options[key])));
+    AsanaClient.prototype.buildUrlParam_ = function (params) {
+      if (!params) return '';
+
+      var temp = [];
+      for (var key in params) {
+        temp.push(Utilities.formatString('%s=%s', key, encodeURIComponent(params[key])));
       }
-      return params.join('&');
+      return temp.join('&');
     };
 
     AsanaClient.prototype.fetch_ = function (endPoint, options) {
       var url = this.apiUrl + endPoint;
       var response = UrlFetchApp.fetch(url, {
-        'method': options.method,
-        'muteHttpExceptions': true,
-        'contentType': 'application/json; charset=utf-8',
-        'headers': this.headers,
-        'payload': options.payload || {}
+        method            : options.method,
+        muteHttpExceptions: true,
+        contentType       : 'application/json; charset=utf-8',
+        headers           : this.headers,
+        payload           : options.payload || {}
       });
-      return JSON.parse(response.getContentText());
+      try {
+        return JSON.parse(response.getContentText('utf-8'));
+      } catch (err) {
+        return response.getContentText('utf-8');
+      }
     };
 
     return AsanaClient;

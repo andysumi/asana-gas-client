@@ -10,7 +10,11 @@
     "googleappsscript/googleappsscript": true
   },
   "globals": {
+    // Google Apps Script
     "console": false,
+    // External Libraries
+    "GasTap": true,
+    // Our Libraries
     "AsanaClient": false
   },
   "rules": {

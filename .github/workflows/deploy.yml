@@ -1,0 +1,98 @@
+name: Deploy
+
+on:
+  push:
+    tags:
+      - 'v.*'
+
+jobs:
+  deploy-develop:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node Version
+        run: |
+          echo "Node $(node -v)"
+          echo "Npm $(npm -v)"
+      - name: Cache Node.js modules
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Install dependencies
+        run: npm ci
+      - name: Create credential file
+        run: |
+          gpg --quiet --batch --yes --decrypt --passphrase="${{ secrets.LARGE_SECRET_PASSPHRASE}}" --output ~/.clasprc.json creds.json.gpg
+          gpg --quiet --batch --yes --decrypt --passphrase="${{ secrets.LARGE_SECRET_PASSPHRASE}}" --output .clasp.json clasp_dev.json.gpg
+      - name: Upload files
+        run: npx @google/clasp push --force
+      - name: Create new version
+        run: |
+          change_log=$(tail -1 version_history | sed -e "s/^[0-9]*[[:blank:]]-[[:blank:]]\(.*\)$/\1/g")
+          npx @google/clasp version ${change_log}
+  deploy-production:
+      runs-on: ubuntu-latest
+
+      steps:
+        - uses: actions/checkout@v2
+        - name: Node Version
+          run: |
+            echo "Node $(node -v)"
+            echo "Npm $(npm -v)"
+        - name: Cache Node.js modules
+          uses: actions/cache@v1
+          with:
+            path: ~/.npm
+            key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+            restore-keys: |
+              ${{ runner.os }}-node-
+        - name: Install dependencies
+          run: npm ci
+        - name: Create credential file
+          run: |
+            gpg --quiet --batch --yes --decrypt --passphrase="${{ secrets.LARGE_SECRET_PASSPHRASE}}" --output ~/.clasprc.json creds.json.gpg
+            gpg --quiet --batch --yes --decrypt --passphrase="${{ secrets.LARGE_SECRET_PASSPHRASE}}" --output .clasp.json clasp_prod.json.gpg
+        - name: Upload files
+          run: npx @google/clasp push --force
+        - name: Create new version
+          run: |
+            change_log=$(tail -1 version_history | sed -e "s/^[0-9]*[[:blank:]]-[[:blank:]]\(.*\)$/\1/g")
+            npx @google/clasp version ${change_log}
+  release:
+    needs: [deploy-develop, deploy-production]
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Node Version
+        run: |
+          echo "Node $(node -v)"
+          echo "Npm $(npm -v)"
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          draft: 'false'
+          prerelease: 'false'
+      - uses: 8398a7/action-slack@v3
+        with:
+          status: ${{ job.status }}
+          author_name: ${{ github.workflow }}
+          username: Github Actions
+          icon_emoji: ':github:'
+          channel: '#github_notify'
+          mention: here
+          if_mention: failure,cancelled
+          text: '<https://github.com/${{ github.repository }}/commit/${{ github.sha }}/checks|${{ job.status }}>: <https://github.com/${{ github.repository }}/actions?query=workflow:${{ github.workflow }}|${{ github.workflow }} Workflow> executed by ${{ github.actor }} in <https://github.com/${{ github.repository }}|${{ github.repository }}>'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+        if: always()
