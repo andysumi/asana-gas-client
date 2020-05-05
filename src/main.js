@@ -83,20 +83,24 @@ function getAllProjects(workspaceId, teamId, isArchived, params) { // eslint-dis
 }
 
 /**
+ * 指定したProjectの情報を取得する
+ * @param {?string} projectId
+ * @param {?Object} params
+ *   @param {?boolean} params.opt_pretty
+ *   @param {?Array<string>} params.opt_fields
+ * @return {Object} Projectのオブジェクト
+ * https://developers.asana.com/docs/get-a-project
+ */
+function getSpecificProject(projectId, params) { // eslint-disable-line no-unused-vars
+  throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
+}
+
+/**
  * Workspace内のProjectを取得する
  * @param {?number} workspaceId 【任意】ワークスペースID
  * @return {Object} Projectのオブジェクト
  */
 function getProjectsInWorkspace(workspaceId) { // eslint-disable-line no-unused-vars
-  throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
-}
-
-/**
- * Projectの情報を取得する
- * @param {?number} projectId 【任意】プロジェクトID
- * @return {Object} Projectのオブジェクト
- */
-function getSpecificProject(projectId) { // eslint-disable-line no-unused-vars
   throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
 }
 

@@ -18,6 +18,7 @@ function TestRunner_() { // eslint-disable-line no-unused-vars
     testGetTeamsInWorkspace_(test, common);
     // Project
     testGetAllProjects_(test, common);
+    testGetSpecificProject_(test, common);
     /***********************************************/
   } catch (err) {
     test('Exception occurred', function f(assert) {
@@ -133,5 +134,23 @@ function testGetAllProjects_(test, common) {
     t.ok(result.data.length === limit, '"limit"で指定した要素の数が取得できること');
     t.equal(result.data[0].resource_type, 'project', 'resource_typeが"project"であること');
     t.ok(Object.prototype.hasOwnProperty.call(result, 'next_page'), '"next_page"を含むこと');
+  });
+}
+
+function testGetSpecificProject_(test, common) {
+  var client = common.getClientUser();
+
+  test('getSpecificProject() - 正常系(idなし)', function (t) {
+    var result = client.getSpecificProject();
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.equal(result.data.resource_type, 'project', 'resource_typeが"project"であること');
+  });
+
+  test('getSpecificProject() - 正常系(idあり)', function (t) {
+    var id = common.projectId;
+    var result = client.getSpecificProject(id);
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.equal(result.data.resource_type, 'project', 'resource_typeが"project"であること');
+    t.equal(result.data.gid, id, 'idが正しいこと');
   });
 }

@@ -40,14 +40,14 @@
 
       return this.fetch_(Utilities.formatString('/projects?%s', this.buildUrlParam_(_.extend(parameter, params))), { 'method': 'get' });
     };
+    AsanaClient.prototype.getSpecificProject = function (projectId, params) {
+      var id = projectId || this.projectId;
+      return this.fetch_(Utilities.formatString('/projects/%s?%s', id, this.buildUrlParam_(params)), { 'method': 'get' });
+    };
+
     AsanaClient.prototype.getProjectsInWorkspace = function (workspaceId) {
       var id = workspaceId || this.workspaceId;
       return this.fetch_(Utilities.formatString('/workspaces/%d/projects', id), { 'method': 'get' });
-    };
-
-    AsanaClient.prototype.getSpecificProject = function (projectId) {
-      var id = projectId || this.projectId;
-      return this.fetch_(Utilities.formatString('/projects/%d', id), { 'method': 'get' });
     };
 
     AsanaClient.prototype.getTasksInProject = function (projectId) {
