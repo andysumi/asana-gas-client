@@ -33,9 +33,17 @@ function TestRunner() { // eslint-disable-line no-unused-vars
 function testGetAllWorkspaces(test, common) {
   var client = common.getClientUser();
 
-  test('getAllWorkspaces() - 正常系', function (t) {
+  test('getAllWorkspaces() - 正常系(paramsなし)', function (t) {
     var result = client.getAllWorkspaces();
     t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(result.length > 1, '"1"以上の要素を含むこと');
+    t.equal(result[0].resource_type, 'workspace', 'resource_typeが"workspace"であること');
+  });
+
+  test('getAllWorkspaces() - 正常系(paramsあり)', function (t) {
+    var result = client.getAllWorkspaces({limit: 1});
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(result.length > 1, '"1"以上の要素を含むこと');
     t.equal(result[0].resource_type, 'workspace', 'resource_typeが"workspace"であること');
   });
 }
