@@ -19,6 +19,16 @@
       return this.fetch_(Utilities.formatString('/workspaces/%s?%s', id, this.buildUrlParam_(params)), { 'method': 'get' });
     };
 
+    // Teams
+    AsanaClient.prototype.getSpecificTeam = function (teamId, params) {
+      var id = teamId || this.teamId;
+      return this.fetch_(Utilities.formatString('/teams/%s?%s', id, this.buildUrlParam_(params)), { 'method': 'get' });
+    };
+    AsanaClient.prototype.getTeamsInWorkspace = function (workspaceId, params) {
+      var id = workspaceId || this.workspaceId;
+      return this.fetch_(Utilities.formatString('/organizations/%s/teams?%s', id, this.buildUrlParam_(params)), { 'method': 'get' });
+    };
+
     AsanaClient.prototype.getProjectsInWorkspace = function (workspaceId) {
       var id = workspaceId || this.workspaceId;
       return this.fetch_(Utilities.formatString('/workspaces/%d/projects', id), { 'method': 'get' });

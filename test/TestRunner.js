@@ -12,6 +12,8 @@ function TestRunner_() { // eslint-disable-line no-unused-vars
     /***** Test cases ******************************/
     testGetAllWorkspaces_(test, common);
     testGetSpecificWorkspace_(test, common);
+    testGetSpecificTeam_(test, common);
+    testGetTeamsInWorkspace_(test, common);
     /***********************************************/
   } catch (err) {
     test('Exception occurred', function f(assert) {
@@ -65,5 +67,44 @@ function testGetSpecificWorkspace_(test, common) {
     t.ok(result instanceof Object, 'Objectで取得できること');
     t.equal(result.data.resource_type, 'workspace', 'resource_typeが"workspace"であること');
     t.equal(result.data.gid, id, 'idが正しいこと');
+  });
+}
+
+function testGetSpecificTeam_(test, common) {
+  var client = common.getClientUser();
+
+  test('getSpecificTeam() - 正常系(idなし)', function (t) {
+    var result = client.getSpecificTeam();
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.equal(result.data.resource_type, 'team', 'resource_typeが"wteam"であること');
+  });
+
+  test('getSpecificTeam() - 正常系(idあり)', function (t) {
+    var id = common.teamId;
+    var result = client.getSpecificTeam(id);
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.equal(result.data.resource_type, 'team', 'resource_typeが"team"であること');
+    t.equal(result.data.gid, id, 'idが正しいこと');
+  });
+}
+
+function testGetTeamsInWorkspace_(test, common) {
+  var client = common.getClientUser();
+
+  test('getTeamsInWorkspace() - 正常系(paramsなし)', function (t) {
+    var result = client.getTeamsInWorkspace();
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(result.data.length > 1, '"1"以上の要素を含むこと');
+    t.equal(result.data[0].resource_type, 'team', 'resource_typeが"team"であること');
+  });
+
+  test('getTeamsInWorkspace() - 正常系(paramsあり)', function (t) {
+    var id = common.workspaceId;
+    var limit = 3;
+    var result = client.getTeamsInWorkspace(id, { limit: limit });
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(result.data.length === limit, '"limit"で指定した要素の数が取得できること');
+    t.equal(result.data[0].resource_type, 'team', 'resource_typeが"team"であること');
+    t.ok(Object.prototype.hasOwnProperty.call(result, 'next_page'), '"next_page"を含むこと');
   });
 }
