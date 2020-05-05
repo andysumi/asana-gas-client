@@ -37,12 +37,17 @@
       if (workspaceId) parameter['workspace'] = workspaceId;
       if (teamId) parameter['team'] = teamId;
       if (isArchived != null) parameter['archived'] = isArchived;
-
       return this.fetch_(Utilities.formatString('/projects?%s', this.buildUrlParam_(_.extend(parameter, params))), { 'method': 'get' });
     };
     AsanaClient.prototype.getSpecificProject = function (projectId, params) {
       var id = projectId || this.projectId;
       return this.fetch_(Utilities.formatString('/projects/%s?%s', id, this.buildUrlParam_(params)), { 'method': 'get' });
+    };
+    AsanaClient.prototype.getProjectsInTeam = function (teamId, isArchived, params) {
+      var id = teamId || this.teamId;
+      var parameter = {};
+      if (isArchived != null) parameter['archived'] = isArchived;
+      return this.fetch_(Utilities.formatString('/teams/%s/projects?%s', id, this.buildUrlParam_(_.extend(parameter, params))), { 'method': 'get' });
     };
 
     AsanaClient.prototype.getProjectsInWorkspace = function (workspaceId) {
