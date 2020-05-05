@@ -128,7 +128,7 @@ function getProjectsInWorkspace(workspaceId, isArchived, params) { // eslint-dis
 }
 
 /**
- * ProjectのTaskをカウントする<br>
+ * 指定したProjectのTaskをカウントする<br>
  * https://developers.asana.com/docs/get-task-count-of-a-project
  * @param {?string} projectId
  * @param {?Object} params
@@ -137,6 +137,19 @@ function getProjectsInWorkspace(workspaceId, isArchived, params) { // eslint-dis
  * @return {Object} データのオブジェクト
  */
 function countProjectTasks(projectId, params) { // eslint-disable-line no-unused-vars
+  throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
+}
+
+/**
+ * 指定したProject statusを取得する<br>
+ * https://developers.asana.com/docs/get-a-project-status
+ * @param {string} projectStatusId
+ * @param {?Object} params
+ *   @param {?boolean} params.opt_pretty
+ *   @param {?Array<string>} params.opt_fields
+ * @return {Object} Project statusのオブジェクト
+ */
+function getSpecificProjectStatus(projectStatusId, params) { // eslint-disable-line no-unused-vars
   throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
 }
 

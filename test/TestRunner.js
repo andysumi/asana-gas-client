@@ -22,6 +22,7 @@ function TestRunner_() { // eslint-disable-line no-unused-vars
     testGetProjectsInTeam_(test, common);
     testGetProjectsInWorkspace_(test, common);
     testCountProjectTasks_(test, common);
+    testGetSpecificProjectStatus_(test, common);
     /***********************************************/
   } catch (err) {
     test('Exception occurred', function f(assert) {
@@ -216,5 +217,23 @@ function testCountProjectTasks_(test, common) {
     var result = client.countProjectTasks(projectId, { opt_fields: fields });
     t.ok(result instanceof Object, 'Objectで取得できること');
     t.ok(Object.prototype.hasOwnProperty.call(result, 'num_tasks'), '"num_tasks"を含むこと');
+  });
+}
+
+function testGetSpecificProjectStatus_(test, common) {
+  var client = common.getClientUser();
+
+  test('getSpecificProjectStatus() - 正常系', function (t) {
+    var id = common.projectStatusId;
+    var result = client.getSpecificProjectStatus(id);
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.equal(result.data.resource_type, 'project_status', 'resource_typeが"project_status"であること');
+  });
+
+  test('getSpecificProjectStatus() - 異常系', function (t) {
+    t.throws(function () {
+      return client.getSpecificProjectStatus();
+    },
+    '"id"を指定していない場合はエラー');
   });
 }

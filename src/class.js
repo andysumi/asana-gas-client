@@ -60,6 +60,10 @@
       var res = this.fetch_(Utilities.formatString('/projects/%s/task_counts?%s', id, this.buildUrlParam_(params)), { 'method': 'get' });
       return res.data;
     };
+    AsanaClient.prototype.getSpecificProjectStatus = function (projectStatusId, params) {
+      if (!projectStatusId) throw new Error('"projectStatusId"は必須です');
+      return this.fetch_(Utilities.formatString('/project_statuses/%s?%s', projectStatusId, this.buildUrlParam_(params)), { 'method': 'get' });
+    };
 
     AsanaClient.prototype.getTasksInProject = function (projectId) {
       var id = projectId || this.projectId;
