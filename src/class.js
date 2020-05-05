@@ -73,9 +73,8 @@
       var response = UrlFetchApp.fetch(url, params);
       var contents = JSON.parse(response.getContentText('utf-8'));
 
-
       if (!/2\d\d/.test(response.getResponseCode())) {
-        return contents.errors;
+        return contents;
       }
 
       var data = contents.data;
