@@ -63,27 +63,18 @@
 
     AsanaClient.prototype.fetch_ = function (endPoint, options) {
       var url = this.apiUrl + endPoint;
-      var params = {
-        method             : options.method,
-        muteHttpExceptions : true,
-        contentType        : 'application/json; charset=utf-8',
-        headers            : this.headers,
-        payload            : options.payload || {}
-      };
-      var response = UrlFetchApp.fetch(url, params);
-      var contents = JSON.parse(response.getContentText('utf-8'));
-
-      if (!/2\d\d/.test(response.getResponseCode())) {
-        return contents;
+      var response = UrlFetchApp.fetch(url, {
+        method            : options.method,
+        muteHttpExceptions: true,
+        contentType       : 'application/json; charset=utf-8',
+        headers           : this.headers,
+        payload           : options.payload || {}
+      });
+      try {
+        return JSON.parse(response.getContentText('utf-8'));
+      } catch (err) {
+        return response.getContentText('utf-8');
       }
-
-      var data = contents.data;
-      while (contents.next_page) {
-        url = contents.next_page.uri;
-        contents = JSON.parse(UrlFetchApp.fetch(url, params).getContentText('utf-8'));
-        data.push.apply(data, contents.data);
-      }
-      return data;
     };
 
     return AsanaClient;
