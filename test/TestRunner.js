@@ -21,6 +21,7 @@ function TestRunner_() { // eslint-disable-line no-unused-vars
     testGetSpecificProject_(test, common);
     testGetProjectsInTeam_(test, common);
     testGetProjectsInWorkspace_(test, common);
+    testCountProjectTasks_(test, common);
     /***********************************************/
   } catch (err) {
     test('Exception occurred', function f(assert) {
@@ -198,5 +199,22 @@ function testGetProjectsInWorkspace_(test, common) {
     t.ok(result.data.length === limit, '"limit"で指定した要素の数が取得できること');
     t.equal(result.data[0].resource_type, 'project', 'resource_typeが"project"であること');
     t.ok(Object.prototype.hasOwnProperty.call(result, 'next_page'), '"next_page"を含むこと');
+  });
+}
+
+function testCountProjectTasks_(test, common) {
+  var client = common.getClientUser();
+
+  test('countProjectTasks() - 正常系(paramsなし)', function (t) {
+    var result = client.countProjectTasks();
+    t.ok(result instanceof Object, 'Objectで取得できること');
+  });
+
+  test('countProjectTasks() - 正常系(paramsあり)', function (t) {
+    var projectId = common.projectId;
+    var fields = ['num_tasks'];
+    var result = client.countProjectTasks(projectId, { opt_fields: fields });
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(Object.prototype.hasOwnProperty.call(result, 'num_tasks'), '"num_tasks"を含むこと');
   });
 }
