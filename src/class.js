@@ -1,5 +1,7 @@
 (function (global) {
   var AsanaClient = (function () {
+    var _ = Underscore.load();
+
     function AsanaClient(token, workspaceId, teamId, projectId) {
       if (!token) throw new Error('"token"は必須です');
 
@@ -29,6 +31,15 @@
       return this.fetch_(Utilities.formatString('/organizations/%s/teams?%s', id, this.buildUrlParam_(params)), { 'method': 'get' });
     };
 
+    // Projects
+    AsanaClient.prototype.getAllProjects = function (workspaceId, teamId, isArchived, params) {
+      var parameter = {};
+      if (workspaceId) parameter['workspace'] = workspaceId;
+      if (teamId) parameter['team'] = teamId;
+      if (isArchived != null) parameter['archived'] = isArchived;
+
+      return this.fetch_(Utilities.formatString('/projects?%s', this.buildUrlParam_(_.extend(parameter, params))), { 'method': 'get' });
+    };
     AsanaClient.prototype.getProjectsInWorkspace = function (workspaceId) {
       var id = workspaceId || this.workspaceId;
       return this.fetch_(Utilities.formatString('/workspaces/%d/projects', id), { 'method': 'get' });

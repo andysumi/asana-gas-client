@@ -11,11 +11,12 @@
   },
   "globals": {
     // Google Apps Script
-    "console": false,
+    "console": true,
     // External Libraries
+    "Underscore": true,
     "GasTap": true,
     // Our Libraries
-    "AsanaClient": false
+    "AsanaClient": true
   },
   "rules": {
     "semi": "warn",

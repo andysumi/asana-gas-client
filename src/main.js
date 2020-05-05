@@ -66,6 +66,23 @@ function getTeamsInWorkspace(workspaceId, params) { // eslint-disable-line no-un
 }
 
 /**
+ * 認証したユーザーに表示されるすべてのProjectの情報を取得する
+ * @param {?string} workspaceId
+ * @param {?string} teamId
+ * @param {?boolean} isArchived
+ * @param {?Object} params
+ *   @param {?boolean} params.opt_pretty
+ *   @param {?Array<string>} params.opt_fields
+ *   @param {?number} params.limit
+ *   @param {?string} params.offset
+ * @return {Object} Projectのオブジェクト
+ * https://developers.asana.com/docs/get-multiple-projects
+ */
+function getAllProjects(workspaceId, teamId, isArchived, params) { // eslint-disable-line no-unused-vars
+  throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
+}
+
+/**
  * Workspace内のProjectを取得する
  * @param {?number} workspaceId 【任意】ワークスペースID
  * @return {Object} Projectのオブジェクト
