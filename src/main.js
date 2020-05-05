@@ -38,6 +38,19 @@ function getSpecificWorkspace(workspaceId, params) { // eslint-disable-line no-u
 }
 
 /**
+ * 指定したTeamの情報を取得する
+ * @param {?string} teamId
+ * @param {?Object} params
+ *   @param {?boolean} params.opt_pretty
+ *   @param {?Array<string>} params.opt_fields
+ * @return {Object} Teamのオブジェクト
+ * https://developers.asana.com/docs/get-a-team
+ */
+function getSpecificTeam(teamId, params) { // eslint-disable-line no-unused-vars
+  throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
+}
+
+/**
  * Workspace内のProjectを取得する
  * @param {?number} workspaceId 【任意】ワークスペースID
  * @return {Object} Projectのオブジェクト
