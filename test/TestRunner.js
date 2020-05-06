@@ -23,6 +23,7 @@ function TestRunner_() { // eslint-disable-line no-unused-vars
     testGetProjectsInWorkspace_(test, common);
     testCountProjectTasks_(test, common);
     testGetSpecificProjectStatus_(test, common);
+    testGetStatusesFromProject_(test, common);
     /***********************************************/
   } catch (err) {
     test('Exception occurred', function f(assert) {
@@ -235,5 +236,26 @@ function testGetSpecificProjectStatus_(test, common) {
       return client.getSpecificProjectStatus();
     },
     '"id"を指定していない場合はエラー');
+  });
+}
+
+function testGetStatusesFromProject_(test, common) {
+  var client = common.getClientUser();
+
+  test('getStatusesFromProject() - 正常系(paramsなし)', function (t) {
+    var result = client.getStatusesFromProject();
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(result.data.length > 1, '"1"以上の要素を含むこと');
+    t.equal(result.data[0].resource_type, 'project_status', 'resource_typeが"project_status"であること');
+  });
+
+  test('getStatusesFromProject() - 正常系(paramsあり)', function (t) {
+    var projectId = common.projectId;
+    var limit = 1;
+    var result = client.getStatusesFromProject(projectId, { limit: limit });
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(result.data.length === limit, '"limit"で指定した要素の数が取得できること');
+    t.equal(result.data[0].resource_type, 'project_status', 'resource_typeが"project_status"であること');
+    t.ok(Object.prototype.hasOwnProperty.call(result, 'next_page'), '"next_page"を含むこと');
   });
 }

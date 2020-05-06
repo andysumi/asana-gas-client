@@ -53,7 +53,7 @@
       var id = workspaceId || this.workspaceId;
       var parameter = {};
       if (isArchived != null) parameter['archived'] = isArchived;
-      return this.fetch_(Utilities.formatString('/workspaces/%d/projects?%s', id, this.buildUrlParam_(_.extend(parameter, params))), { 'method': 'get' });
+      return this.fetch_(Utilities.formatString('/workspaces/%s/projects?%s', id, this.buildUrlParam_(_.extend(parameter, params))), { 'method': 'get' });
     };
     AsanaClient.prototype.countProjectTasks = function (projectId, params) {
       var id = projectId || this.projectId;
@@ -63,6 +63,10 @@
     AsanaClient.prototype.getSpecificProjectStatus = function (projectStatusId, params) {
       if (!projectStatusId) throw new Error('"projectStatusId"は必須です');
       return this.fetch_(Utilities.formatString('/project_statuses/%s?%s', projectStatusId, this.buildUrlParam_(params)), { 'method': 'get' });
+    };
+    AsanaClient.prototype.getStatusesFromProject = function (projectId, params) {
+      var id = projectId || this.projectId;
+      return this.fetch_(Utilities.formatString('/projects/%s/project_statuses?%s', id, this.buildUrlParam_(params)), { 'method': 'get' });
     };
 
     AsanaClient.prototype.getTasksInProject = function (projectId) {
