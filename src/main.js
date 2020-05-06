@@ -1,6 +1,6 @@
 /**
  * Asana Clientのインスタンスを作成する
- * @param {string} token 【必須】
+ * @param {string} token
  * @param {?string} workspaceId
  * @param {?string} teamId
  * @param {?string} projectId
@@ -11,47 +11,48 @@ function create(token, workspaceId, teamId, projectId) { // eslint-disable-line 
 }
 
 /**
- * 認証したユーザーに表示されるすべてのWorkspaceの情報を取得する
+ * 認証したユーザーに表示されるすべてのWorkspaceの情報を取得する<br>
+ * https://developers.asana.com/docs/get-multiple-workspaces
  * @param {?Object} params
  *   @param {?boolean} params.opt_pretty
  *   @param {?Array<string>} params.opt_fields
  *   @param {?number} params.limit
  *   @param {?string} params.offset
  * @return {Object} Workspaceのオブジェクト
- * https://developers.asana.com/docs/get-multiple-workspaces
  */
 function getAllWorkspaces(params) { // eslint-disable-line no-unused-vars
   throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
 }
 
 /**
- * 指定したWorkspaceの情報を取得する
+ * 指定したWorkspaceの情報を取得する<br>
+ * https://developers.asana.com/docs/get-a-workspace
  * @param {?string} workspaceId
  * @param {?Object} params
  *   @param {?boolean} params.opt_pretty
  *   @param {?Array<string>} params.opt_fields
  * @return {Object} Workspaceのオブジェクト
- * https://developers.asana.com/docs/get-a-workspace
  */
 function getSpecificWorkspace(workspaceId, params) { // eslint-disable-line no-unused-vars
   throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
 }
 
 /**
- * 指定したTeamの情報を取得する
+ * 指定したTeamの情報を取得する<br>
+ * https://developers.asana.com/docs/get-a-team
  * @param {?string} teamId
  * @param {?Object} params
  *   @param {?boolean} params.opt_pretty
  *   @param {?Array<string>} params.opt_fields
  * @return {Object} Teamのオブジェクト
- * https://developers.asana.com/docs/get-a-team
  */
 function getSpecificTeam(teamId, params) { // eslint-disable-line no-unused-vars
   throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
 }
 
 /**
- * 指定したWorkspaceに表示されるすべてのTeamの情報を取得する
+ * 指定したWorkspaceに表示されるすべてのTeamの情報を取得する<br>
+ * https://developers.asana.com/docs/get-teams-in-an-organization
  * @param {?string} workspaceId
  * @param {?Object} params
  *   @param {?boolean} params.opt_pretty
@@ -59,27 +60,111 @@ function getSpecificTeam(teamId, params) { // eslint-disable-line no-unused-vars
  *   @param {?number} params.limit
  *   @param {?string} params.offset
  * @return {Object} Teamのオブジェクト
- * https://developers.asana.com/docs/get-teams-in-an-organization
  */
 function getTeamsInWorkspace(workspaceId, params) { // eslint-disable-line no-unused-vars
   throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
 }
 
 /**
- * Workspace内のProjectを取得する
- * @param {?number} workspaceId 【任意】ワークスペースID
+ * 認証したユーザーに表示されるすべてのProjectを取得する<br>
+ * https://developers.asana.com/docs/get-multiple-projects
+ * @param {?string} workspaceId
+ * @param {?string} teamId
+ * @param {?boolean} isArchived
+ * @param {?Object} params
+ *   @param {?boolean} params.opt_pretty
+ *   @param {?Array<string>} params.opt_fields
+ *   @param {?number} params.limit
+ *   @param {?string} params.offset
  * @return {Object} Projectのオブジェクト
  */
-function getProjectsInWorkspace(workspaceId) { // eslint-disable-line no-unused-vars
+function getAllProjects(workspaceId, teamId, isArchived, params) { // eslint-disable-line no-unused-vars
   throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
 }
 
 /**
- * Projectの情報を取得する
- * @param {?number} projectId 【任意】プロジェクトID
+ * 指定したProjectを取得する<br>
+ * https://developers.asana.com/docs/get-a-project
+ * @param {?string} projectId
+ * @param {?Object} params
+ *   @param {?boolean} params.opt_pretty
+ *   @param {?Array<string>} params.opt_fields
  * @return {Object} Projectのオブジェクト
  */
-function getSpecificProject(projectId) { // eslint-disable-line no-unused-vars
+function getSpecificProject(projectId, params) { // eslint-disable-line no-unused-vars
+  throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
+}
+
+/**
+ * 指定したTeam内のProjectを取得する<br>
+ * https://developers.asana.com/docs/get-a-teams-projects
+ * @param {?string} teamId
+ * @param {?boolean} isArchived
+ * @param {?Object} params
+ *   @param {?boolean} params.opt_pretty
+ *   @param {?Array<string>} params.opt_fields
+ *   @param {?number} params.limit
+ *   @param {?string} params.offset
+ * @return {Object} Projectのオブジェクト
+ */
+function getProjectsInTeam(teamId, isArchived, params) { // eslint-disable-line no-unused-vars
+  throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
+}
+
+/**
+ * 指定したWorkspace内のProjectを取得する<br>
+ * https://developers.asana.com/docs/get-all-projects-in-a-workspace
+ * @param {?string} workspaceId
+ * @param {?boolean} isArchived
+ * @param {?Object} params
+ *   @param {?boolean} params.opt_pretty
+ *   @param {?Array<string>} params.opt_fields
+ *   @param {?number} params.limit
+ *   @param {?string} params.offset
+ * @return {Object} Projectのオブジェクト
+ */
+function getProjectsInWorkspace(workspaceId, isArchived, params) { // eslint-disable-line no-unused-vars
+  throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
+}
+
+/**
+ * 指定したProjectのTaskをカウントする<br>
+ * https://developers.asana.com/docs/get-task-count-of-a-project
+ * @param {?string} projectId
+ * @param {?Object} params
+ *   @param {?boolean} params.opt_pretty
+ *   @param {?Array<string>} params.opt_fields
+ * @return {Object} データのオブジェクト
+ */
+function countProjectTasks(projectId, params) { // eslint-disable-line no-unused-vars
+  throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
+}
+
+/**
+ * 指定したProject statusを取得する<br>
+ * https://developers.asana.com/docs/get-a-project-status
+ * @param {string} projectStatusId
+ * @param {?Object} params
+ *   @param {?boolean} params.opt_pretty
+ *   @param {?Array<string>} params.opt_fields
+ * @return {Object} Project statusのオブジェクト
+ */
+function getSpecificProjectStatus(projectStatusId, params) { // eslint-disable-line no-unused-vars
+  throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
+}
+
+/**
+ * 指定したProjectのStatusを取得する<br>
+ * https://developers.asana.com/docs/get-statuses-from-a-project
+ * @param {?string} projectId
+ * @param {?Object} params
+ *   @param {?boolean} params.opt_pretty
+ *   @param {?Array<string>} params.opt_fields
+ *   @param {?number} params.limit
+ *   @param {?string} params.offset
+ * @return {Object} Project statusのオブジェクト
+ */
+function getStatusesFromProject(projectId, params) { // eslint-disable-line no-unused-vars
   throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
 }
 
@@ -109,16 +194,5 @@ function getSpecificTask(taskId) { // eslint-disable-line no-unused-vars
  * @return {Object} Taskのオブジェクト
  */
 function searchTask(workspaceId, params) { // eslint-disable-line no-unused-vars
-  throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
-}
-
-/**
- * Project内のTaskをカウントする
- * https://asana.com/developers/api-reference/projects#get-task-counts
- * @param {?number} projectId 【任意】プロジェクトID
- * @param {Array<string>} fields 【必須】カウントするフィールド
- * @return {Object} データのオブジェクト
- */
-function countProjectTasks(projectId, fields) { // eslint-disable-line no-unused-vars
   throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
 }

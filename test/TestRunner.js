@@ -10,10 +10,20 @@ function TestRunner_() { // eslint-disable-line no-unused-vars
 
   try {
     /***** Test cases ******************************/
+    // Workspace
     testGetAllWorkspaces_(test, common);
     testGetSpecificWorkspace_(test, common);
+    // Team
     testGetSpecificTeam_(test, common);
     testGetTeamsInWorkspace_(test, common);
+    // Project
+    testGetAllProjects_(test, common);
+    testGetSpecificProject_(test, common);
+    testGetProjectsInTeam_(test, common);
+    testGetProjectsInWorkspace_(test, common);
+    testCountProjectTasks_(test, common);
+    testGetSpecificProjectStatus_(test, common);
+    testGetStatusesFromProject_(test, common);
     /***********************************************/
   } catch (err) {
     test('Exception occurred', function f(assert) {
@@ -105,6 +115,147 @@ function testGetTeamsInWorkspace_(test, common) {
     t.ok(result instanceof Object, 'Objectで取得できること');
     t.ok(result.data.length === limit, '"limit"で指定した要素の数が取得できること');
     t.equal(result.data[0].resource_type, 'team', 'resource_typeが"team"であること');
+    t.ok(Object.prototype.hasOwnProperty.call(result, 'next_page'), '"next_page"を含むこと');
+  });
+}
+
+function testGetAllProjects_(test, common) {
+  var client = common.getClientUser();
+
+  test('getAllProjects() - 正常系(paramsなし)', function (t) {
+    var result = client.getAllProjects();
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(result.data.length > 1, '"1"以上の要素を含むこと');
+    t.equal(result.data[0].resource_type, 'project', 'resource_typeが"project"であること');
+  });
+
+  test('getAllProjects() - 正常系(paramsあり)', function (t) {
+    var workspaceId = common.workspaceId;
+    var teamId = common.teamId;
+    var isArchived = false;
+    var limit = 3;
+    var result = client.getAllProjects(workspaceId, teamId, isArchived, { limit: limit });
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(result.data.length === limit, '"limit"で指定した要素の数が取得できること');
+    t.equal(result.data[0].resource_type, 'project', 'resource_typeが"project"であること');
+    t.ok(Object.prototype.hasOwnProperty.call(result, 'next_page'), '"next_page"を含むこと');
+  });
+}
+
+function testGetSpecificProject_(test, common) {
+  var client = common.getClientUser();
+
+  test('getSpecificProject() - 正常系(idなし)', function (t) {
+    var result = client.getSpecificProject();
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.equal(result.data.resource_type, 'project', 'resource_typeが"project"であること');
+  });
+
+  test('getSpecificProject() - 正常系(idあり)', function (t) {
+    var id = common.projectId;
+    var result = client.getSpecificProject(id);
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.equal(result.data.resource_type, 'project', 'resource_typeが"project"であること');
+    t.equal(result.data.gid, id, 'idが正しいこと');
+  });
+}
+
+function testGetProjectsInTeam_(test, common) {
+  var client = common.getClientUser();
+
+  test('getProjectsInTeam() - 正常系(paramsなし)', function (t) {
+    var result = client.getProjectsInTeam();
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(result.data.length > 1, '"1"以上の要素を含むこと');
+    t.equal(result.data[0].resource_type, 'project', 'resource_typeが"project"であること');
+  });
+
+  test('getProjectsInTeam() - 正常系(paramsあり)', function (t) {
+    var teamId = common.teamId;
+    var isArchived = false;
+    var limit = 3;
+    var result = client.getProjectsInTeam(teamId, isArchived, { limit: limit });
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(result.data.length === limit, '"limit"で指定した要素の数が取得できること');
+    t.equal(result.data[0].resource_type, 'project', 'resource_typeが"project"であること');
+    t.ok(Object.prototype.hasOwnProperty.call(result, 'next_page'), '"next_page"を含むこと');
+  });
+}
+
+function testGetProjectsInWorkspace_(test, common) {
+  var client = common.getClientUser();
+
+  test('getProjectsInWorkspace() - 正常系(paramsなし)', function (t) {
+    var result = client.getProjectsInWorkspace();
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(result.data.length > 1, '"1"以上の要素を含むこと');
+    t.equal(result.data[0].resource_type, 'project', 'resource_typeが"project"であること');
+  });
+
+  test('getProjectsInWorkspace() - 正常系(paramsあり)', function (t) {
+    var workspaceId = common.workspaceId;
+    var isArchived = false;
+    var limit = 3;
+    var result = client.getProjectsInWorkspace(workspaceId, isArchived, { limit: limit });
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(result.data.length === limit, '"limit"で指定した要素の数が取得できること');
+    t.equal(result.data[0].resource_type, 'project', 'resource_typeが"project"であること');
+    t.ok(Object.prototype.hasOwnProperty.call(result, 'next_page'), '"next_page"を含むこと');
+  });
+}
+
+function testCountProjectTasks_(test, common) {
+  var client = common.getClientUser();
+
+  test('countProjectTasks() - 正常系(paramsなし)', function (t) {
+    var result = client.countProjectTasks();
+    t.ok(result instanceof Object, 'Objectで取得できること');
+  });
+
+  test('countProjectTasks() - 正常系(paramsあり)', function (t) {
+    var projectId = common.projectId;
+    var fields = ['num_tasks'];
+    var result = client.countProjectTasks(projectId, { opt_fields: fields });
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(Object.prototype.hasOwnProperty.call(result, 'num_tasks'), '"num_tasks"を含むこと');
+  });
+}
+
+function testGetSpecificProjectStatus_(test, common) {
+  var client = common.getClientUser();
+
+  test('getSpecificProjectStatus() - 正常系', function (t) {
+    var id = common.projectStatusId;
+    var result = client.getSpecificProjectStatus(id);
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.equal(result.data.resource_type, 'project_status', 'resource_typeが"project_status"であること');
+  });
+
+  test('getSpecificProjectStatus() - 異常系', function (t) {
+    t.throws(function () {
+      return client.getSpecificProjectStatus();
+    },
+    '"id"を指定していない場合はエラー');
+  });
+}
+
+function testGetStatusesFromProject_(test, common) {
+  var client = common.getClientUser();
+
+  test('getStatusesFromProject() - 正常系(paramsなし)', function (t) {
+    var result = client.getStatusesFromProject();
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(result.data.length > 1, '"1"以上の要素を含むこと');
+    t.equal(result.data[0].resource_type, 'project_status', 'resource_typeが"project_status"であること');
+  });
+
+  test('getStatusesFromProject() - 正常系(paramsあり)', function (t) {
+    var projectId = common.projectId;
+    var limit = 1;
+    var result = client.getStatusesFromProject(projectId, { limit: limit });
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(result.data.length === limit, '"limit"で指定した要素の数が取得できること');
+    t.equal(result.data[0].resource_type, 'project_status', 'resource_typeが"project_status"であること');
     t.ok(Object.prototype.hasOwnProperty.call(result, 'next_page'), '"next_page"を含むこと');
   });
 }
