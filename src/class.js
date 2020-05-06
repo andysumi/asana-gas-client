@@ -88,6 +88,10 @@
       var id = projectId || this.projectId;
       return this.fetch_(Utilities.formatString('/projects/%s/tasks?%s', id, this.buildUrlParam_(params)), { 'method': 'get' });
     };
+    AsanaClient.prototype.getTasksInSection = function (sectionId, params) {
+      if (!sectionId) throw new Error('"sectionId"は必須です');
+      return this.fetch_(Utilities.formatString('/sections/%s/tasks?%s', sectionId, this.buildUrlParam_(params)), { 'method': 'get' });
+    };
 
     AsanaClient.prototype.searchTask = function (workspaceId, params) {
       var id = workspaceId || this.workspaceId;

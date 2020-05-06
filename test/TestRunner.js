@@ -28,6 +28,7 @@ function TestRunner_() { // eslint-disable-line no-unused-vars
     testGetAllTasks_(test, common);
     testGetSpecificTask_(test, common);
     testGetTasksInProject_(test, common);
+    testGetTasksInSection_(test, common);
     /***********************************************/
   } catch (err) {
     test('Exception occurred', function f(assert) {
@@ -370,6 +371,35 @@ function testGetTasksInProject_(test, common) {
     var fields = ['name'];
     var limit = 1;
     var result = client.getTasksInProject(projectId, { opt_fields: fields, limit: limit });
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(Object.prototype.hasOwnProperty.call(result.data[0], fields[0]), '"opt_fields"で指定したfieldを含むこと');
+    t.ok(result.data.length === limit, '"limit"で指定した要素の数が取得できること');
+    t.ok(Object.prototype.hasOwnProperty.call(result, 'next_page'), '"next_page"を含むこと');
+  });
+}
+
+function testGetTasksInSection_(test, common) {
+  var client = common.getClientUser();
+
+  test('getTasksInSection() - 異常系(sectionIdなし)', function (t) {
+    t.throws(function () {
+      return client.getTasksInSection();
+    },
+    '"id"を指定していない場合はエラー');
+  });
+
+  test('getTasksInSection() - 正常系(projectIdあり)', function (t) {
+    var sectionId = common.sectionId;
+    var result = client.getTasksInSection(sectionId);
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.equal(result.data[0].resource_type, 'task', 'resource_typeが"task"であること');
+  });
+
+  test('getTasksInSection() - 正常系(paramsあり)', function (t) {
+    var sectionId = common.sectionId;
+    var fields = ['name'];
+    var limit = 1;
+    var result = client.getTasksInSection(sectionId, { opt_fields: fields, limit: limit });
     t.ok(result instanceof Object, 'Objectで取得できること');
     t.ok(Object.prototype.hasOwnProperty.call(result.data[0], fields[0]), '"opt_fields"で指定したfieldを含むこと');
     t.ok(result.data.length === limit, '"limit"で指定した要素の数が取得できること');
