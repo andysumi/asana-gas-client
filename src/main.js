@@ -247,6 +247,21 @@ function getTasksWithTag(tagId, params) { // eslint-disable-line no-unused-vars
 }
 
 /**
+ * 指定したTask内のSubTaskを取得する<br>
+ * https://developers.asana.com/docs/get-subtasks-from-a-task
+ * @param {string} taskId
+ * @param {?Object} params
+ *   @param {?boolean} params.opt_pretty
+ *   @param {?Array<string>} params.opt_fields
+ *   @param {?number} params.limit
+ *   @param {?string} params.offset
+ * @return {Object}
+ */
+function getSubTasksInTask(taskId, params) { // eslint-disable-line no-unused-vars
+  throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
+}
+
+/**
  * Taskを検索する
  * https://asana.com/developers/documentation/getting-started/search-api
  * @param {?number} workspaceId 【任意】ワークスペースID

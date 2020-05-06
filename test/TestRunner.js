@@ -30,6 +30,7 @@ function TestRunner_() { // eslint-disable-line no-unused-vars
     testGetTasksInProject_(test, common);
     testGetTasksInSection_(test, common);
     testGetTasksWithTag_(test, common);
+    testGetSubTasksInTask_(test, common);
     /***********************************************/
   } catch (err) {
     test('Exception occurred', function f(assert) {
@@ -430,6 +431,35 @@ function testGetTasksWithTag_(test, common) {
     var fields = ['name'];
     var limit = 1;
     var result = client.getTasksWithTag(tagId, { opt_fields: fields, limit: limit });
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(Object.prototype.hasOwnProperty.call(result.data[0], fields[0]), '"opt_fields"で指定したfieldを含むこと');
+    t.ok(result.data.length === limit, '"limit"で指定した要素の数が取得できること');
+    t.ok(Object.prototype.hasOwnProperty.call(result, 'next_page'), '"next_page"を含むこと');
+  });
+}
+
+function testGetSubTasksInTask_(test, common) {
+  var client = common.getClientUser();
+
+  test('getSubTasksInTask() - 異常系(taskIdなし)', function (t) {
+    t.throws(function () {
+      return client.getSubTasksInTask();
+    },
+    '"id"を指定していない場合はエラー');
+  });
+
+  test('getSubTasksInTask() - 正常系(taskIdあり)', function (t) {
+    var taskId = common.taskId;
+    var result = client.getSubTasksInTask(taskId);
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.equal(result.data[0].resource_type, 'task', 'resource_typeが"task"であること');
+  });
+
+  test('getSubTasksInTask() - 正常系(paramsあり)', function (t) {
+    var taskId = common.taskId;
+    var fields = ['name'];
+    var limit = 1;
+    var result = client.getSubTasksInTask(taskId, { opt_fields: fields, limit: limit });
     t.ok(result instanceof Object, 'Objectで取得できること');
     t.ok(Object.prototype.hasOwnProperty.call(result.data[0], fields[0]), '"opt_fields"で指定したfieldを含むこと');
     t.ok(result.data.length === limit, '"limit"で指定した要素の数が取得できること');
