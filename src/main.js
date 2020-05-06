@@ -262,12 +262,17 @@ function getSubTasksInTask(taskId, params) { // eslint-disable-line no-unused-va
 }
 
 /**
- * Taskを検索する
- * https://asana.com/developers/documentation/getting-started/search-api
- * @param {?number} workspaceId 【任意】ワークスペースID
- * @param {Object} params 【必須】パラメーター
- * @return {Object} Taskのオブジェクト
+ * 指定したWorkspace内のTaskを検索する<br>
+ * https://developers.asana.com/docs/search-tasks-in-a-workspace
+ * @param {?string} workspaceId
+ * @param {Object} keys ドキュメント参照
+ * @param {?Object} params
+ *   @param {?boolean} params.opt_pretty
+ *   @param {?Array<string>} params.opt_fields
+ *   @param {?number} params.limit
+ *   @param {?string} params.offset
+ * @return {Object}
  */
-function searchTask(workspaceId, params) { // eslint-disable-line no-unused-vars
+function searchTaskInWorkspace(workspaceId, keys, params) { // eslint-disable-line no-unused-vars
   throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
 }

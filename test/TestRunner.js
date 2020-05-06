@@ -31,6 +31,7 @@ function TestRunner_() { // eslint-disable-line no-unused-vars
     testGetTasksInSection_(test, common);
     testGetTasksWithTag_(test, common);
     testGetSubTasksInTask_(test, common);
+    testSearchTaskInWorkspace_(test, common);
     /***********************************************/
   } catch (err) {
     test('Exception occurred', function f(assert) {
@@ -464,5 +465,52 @@ function testGetSubTasksInTask_(test, common) {
     t.ok(Object.prototype.hasOwnProperty.call(result.data[0], fields[0]), '"opt_fields"で指定したfieldを含むこと');
     t.ok(result.data.length === limit, '"limit"で指定した要素の数が取得できること');
     t.ok(Object.prototype.hasOwnProperty.call(result, 'next_page'), '"next_page"を含むこと');
+  });
+}
+
+function testSearchTaskInWorkspace_(test, common) {
+  var client = common.getClientUser();
+
+  test('searchTaskInWorkspace() - 異常系(keysなし)', function (t) {
+    t.throws(function () {
+      return client.searchTaskInWorkspace();
+    },
+    '"keys"を指定していない場合はエラー');
+  });
+
+  test('searchTaskInWorkspace() - 正常系(workspaceIdなし)', function (t) {
+    var keys = {
+      'text'          : 'hoge'
+    };
+    var result = client.searchTaskInWorkspace(null, keys);
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.equal(result.data[0].resource_type, 'task', 'resource_typeが"task"であること');
+  });
+
+  test('searchTaskInWorkspace() - 正常系(workspaceIdあり)', function (t) {
+    var workspaceId = common.workspaceId;
+    var keys = {
+      'assignee.any'  : common.userId,
+      'projects.all'  : common.projectId,
+      'completed'     : true,
+      'sort_by'       : 'created_at',
+      'sort_ascending': true
+    };
+    var result = client.searchTaskInWorkspace(workspaceId, keys);
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.equal(result.data[0].resource_type, 'task', 'resource_typeが"task"であること');
+  });
+
+  test('searchTaskInWorkspace() - 正常系(paramsあり)', function (t) {
+    var workspaceId = common.workspaceId;
+    var keys = {
+      'assignee.any': common.userId,
+    };
+    var fields = ['name'];
+    var limit = 1;
+    var result = client.searchTaskInWorkspace(workspaceId, keys, { opt_fields: fields, limit: limit });
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(Object.prototype.hasOwnProperty.call(result.data[0], fields[0]), '"opt_fields"で指定したfieldを含むこと');
+    t.ok(result.data.length === limit, '"limit"で指定した要素の数が取得できること');
   });
 }

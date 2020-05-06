@@ -100,11 +100,10 @@
       if (!taskId) throw new Error('"taskId"は必須です');
       return this.fetch_(Utilities.formatString('/tasks/%s/subtasks?%s', taskId, this.buildUrlParam_(params)), { 'method': 'get' });
     };
-
-    AsanaClient.prototype.searchTask = function (workspaceId, params) {
+    AsanaClient.prototype.searchTaskInWorkspace = function (workspaceId, keys, params) {
+      if (!keys) throw new Error('"keys"は必須です');
       var id = workspaceId || this.workspaceId;
-      var parameter = this.buildUrlParam_(params);
-      return this.fetch_(Utilities.formatString('/workspaces/%d/tasks/search?%s', id, parameter), { 'method': 'get' });
+      return this.fetch_(Utilities.formatString('/workspaces/%s/tasks/search?%s', id, this.buildUrlParam_(_.extend(keys, params))), { 'method': 'get' });
     };
 
     AsanaClient.prototype.buildUrlParam_ = function (params) {
