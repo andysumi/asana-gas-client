@@ -202,11 +202,17 @@ function getSpecificTask(taskId, params) { // eslint-disable-line no-unused-vars
 }
 
 /**
- * Project内のTaskを取得する
- * @param {?number} projectId 【任意】プロジェクトID
- * @return {Object} Taskのオブジェクト
+ * 指定したProject内のTaskを取得する<br>
+ * https://developers.asana.com/docs/get-tasks-from-a-project
+ * @param {?string} projectId
+ * @param {?Object} params
+ *   @param {?boolean} params.opt_pretty
+ *   @param {?Array<string>} params.opt_fields
+ *   @param {?number} params.limit
+ *   @param {?string} params.offset
+ * @return {Object}
  */
-function getTasksInProject(projectId) { // eslint-disable-line no-unused-vars
+function getTasksInProject(projectId, params) { // eslint-disable-line no-unused-vars
   throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
 }
 

@@ -84,10 +84,9 @@
       if (!taskId) throw new Error('"taskId"は必須です');
       return this.fetch_(Utilities.formatString('/tasks/%s?%s', taskId, this.buildUrlParam_(params)), { 'method': 'get' });
     };
-
-    AsanaClient.prototype.getTasksInProject = function (projectId) {
+    AsanaClient.prototype.getTasksInProject = function (projectId, params) {
       var id = projectId || this.projectId;
-      return this.fetch_(Utilities.formatString('/projects/%d/tasks', id), { 'method': 'get' });
+      return this.fetch_(Utilities.formatString('/projects/%s/tasks?%s', id, this.buildUrlParam_(params)), { 'method': 'get' });
     };
 
     AsanaClient.prototype.searchTask = function (workspaceId, params) {
