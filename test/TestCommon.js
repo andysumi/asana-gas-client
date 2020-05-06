@@ -7,6 +7,7 @@ var TestCommon_ = function () {
   this.projectStatusId = properties.getProperty('PROJECT_STATUS_ID');
   this.sectionId = properties.getProperty('SECTION_ID');
   this.taskId = properties.getProperty('TASK_ID');
+  this.tagId = properties.getProperty('TAG_ID');
   this.userId = properties.getProperty('USER_ID');
 };
 

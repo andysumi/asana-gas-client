@@ -29,6 +29,7 @@ function TestRunner_() { // eslint-disable-line no-unused-vars
     testGetSpecificTask_(test, common);
     testGetTasksInProject_(test, common);
     testGetTasksInSection_(test, common);
+    testGetTasksWithTag_(test, common);
     /***********************************************/
   } catch (err) {
     test('Exception occurred', function f(assert) {
@@ -388,7 +389,7 @@ function testGetTasksInSection_(test, common) {
     '"id"を指定していない場合はエラー');
   });
 
-  test('getTasksInSection() - 正常系(projectIdあり)', function (t) {
+  test('getTasksInSection() - 正常系(sectionIdあり)', function (t) {
     var sectionId = common.sectionId;
     var result = client.getTasksInSection(sectionId);
     t.ok(result instanceof Object, 'Objectで取得できること');
@@ -400,6 +401,35 @@ function testGetTasksInSection_(test, common) {
     var fields = ['name'];
     var limit = 1;
     var result = client.getTasksInSection(sectionId, { opt_fields: fields, limit: limit });
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(Object.prototype.hasOwnProperty.call(result.data[0], fields[0]), '"opt_fields"で指定したfieldを含むこと');
+    t.ok(result.data.length === limit, '"limit"で指定した要素の数が取得できること');
+    t.ok(Object.prototype.hasOwnProperty.call(result, 'next_page'), '"next_page"を含むこと');
+  });
+}
+
+function testGetTasksWithTag_(test, common) {
+  var client = common.getClientUser();
+
+  test('getTasksWithTag() - 異常系(tagIdなし)', function (t) {
+    t.throws(function () {
+      return client.getTasksWithTag();
+    },
+    '"id"を指定していない場合はエラー');
+  });
+
+  test('getTasksWithTag() - 正常系(tagIdあり)', function (t) {
+    var tagId = common.tagId;
+    var result = client.getTasksWithTag(tagId);
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.equal(result.data[0].resource_type, 'task', 'resource_typeが"task"であること');
+  });
+
+  test('getTasksWithTag() - 正常系(paramsあり)', function (t) {
+    var tagId = common.tagId;
+    var fields = ['name'];
+    var limit = 1;
+    var result = client.getTasksWithTag(tagId, { opt_fields: fields, limit: limit });
     t.ok(result instanceof Object, 'Objectで取得できること');
     t.ok(Object.prototype.hasOwnProperty.call(result.data[0], fields[0]), '"opt_fields"で指定したfieldを含むこと');
     t.ok(result.data.length === limit, '"limit"で指定した要素の数が取得できること');

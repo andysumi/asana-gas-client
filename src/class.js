@@ -92,6 +92,10 @@
       if (!sectionId) throw new Error('"sectionId"は必須です');
       return this.fetch_(Utilities.formatString('/sections/%s/tasks?%s', sectionId, this.buildUrlParam_(params)), { 'method': 'get' });
     };
+    AsanaClient.prototype.getTasksWithTag = function (tagId, params) {
+      if (!tagId) throw new Error('"tagId"は必須です');
+      return this.fetch_(Utilities.formatString('/tags/%s/tasks?%s', tagId, this.buildUrlParam_(params)), { 'method': 'get' });
+    };
 
     AsanaClient.prototype.searchTask = function (workspaceId, params) {
       var id = workspaceId || this.workspaceId;
