@@ -69,6 +69,19 @@
       return this.fetch_(Utilities.formatString('/projects/%s/project_statuses?%s', id, this.buildUrlParam_(params)), { 'method': 'get' });
     };
 
+    // Tasks
+    AsanaClient.prototype.getAllTasks = function (workspaceId, projectId, sectionId, userId, completedSince, modifiedSince, params) {
+      var parameter = {};
+      if (workspaceId) parameter['workspace'] = workspaceId;
+      if (projectId) parameter['project'] = projectId;
+      if (sectionId) parameter['section'] = sectionId;
+      if (userId) parameter['assignee'] = userId;
+      if (completedSince) parameter['completed_since'] = completedSince;
+      if (modifiedSince) parameter['modified_since'] = modifiedSince;
+      return this.fetch_(Utilities.formatString('/tasks?%s', this.buildUrlParam_(_.extend(parameter, params))), { 'method': 'get' });
+    };
+
+
     AsanaClient.prototype.getTasksInProject = function (projectId) {
       var id = projectId || this.projectId;
       return this.fetch_(Utilities.formatString('/projects/%d/tasks', id), { 'method': 'get' });

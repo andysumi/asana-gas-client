@@ -169,6 +169,26 @@ function getStatusesFromProject(projectId, params) { // eslint-disable-line no-u
 }
 
 /**
+ * 指定した条件に該当するTaskを取得する<br>
+ * https://developers.asana.com/docs/get-multiple-tasks
+ * @param {?string} workspaceId
+ * @param {?string} projectId
+ * @param {?string} sectionId
+ * @param {?string} userId
+ * @param {?string} completedSince date-time
+ * @param {?string} modifiedSince date-time
+ * @param {?Object} params
+ *   @param {?boolean} params.opt_pretty
+ *   @param {?Array<string>} params.opt_fields
+ *   @param {?number} params.limit
+ *   @param {?string} params.offset
+ * @return {Object}
+ */
+function getAllTasks(workspaceId, projectId, sectionId, userId, completedSince, modifiedSince, params) { // eslint-disable-line no-unused-vars
+  throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
+}
+
+/**
  * Project内のTaskを取得する
  * @param {?number} projectId 【任意】プロジェクトID
  * @return {Object} Taskのオブジェクト

@@ -24,6 +24,8 @@ function TestRunner_() { // eslint-disable-line no-unused-vars
     testCountProjectTasks_(test, common);
     testGetSpecificProjectStatus_(test, common);
     testGetStatusesFromProject_(test, common);
+    // Task
+    testGetAllTasks_(test, common);
     /***********************************************/
   } catch (err) {
     test('Exception occurred', function f(assert) {
@@ -256,6 +258,64 @@ function testGetStatusesFromProject_(test, common) {
     t.ok(result instanceof Object, 'Objectで取得できること');
     t.ok(result.data.length === limit, '"limit"で指定した要素の数が取得できること');
     t.equal(result.data[0].resource_type, 'project_status', 'resource_typeが"project_status"であること');
+    t.ok(Object.prototype.hasOwnProperty.call(result, 'next_page'), '"next_page"を含むこと');
+  });
+}
+
+function testGetAllTasks_(test, common) {
+  var client = common.getClientUser();
+
+  test('getAllTasks() - 異常系', function (t) {
+    var result = client.getAllTasks();
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(Object.prototype.hasOwnProperty.call(result, 'errors'), '引数を指定しないとエラー');
+  });
+
+  test('getAllTasks() - 正常系(workspace&assignee&completed_since)', function (t) {
+    var workspaceId = common.workspaceId;
+    var userId = common.userId;
+    var result = client.getAllTasks(workspaceId, null, null, userId, null, null, null);
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.equal(result.data[0].resource_type, 'task', 'resource_typeが"task"であること');
+  });
+
+  test('getAllTasks() - 正常系(project)', function (t) {
+    var projectId = common.projectId;
+    var result = client.getAllTasks(null, projectId, null, null, null, null, null);
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.equal(result.data[0].resource_type, 'task', 'resource_typeが"task"であること');
+  });
+
+  test('getAllTasks() - 正常系(section)', function (t) {
+    var sectionId = common.sectionId;
+    var result = client.getAllTasks(null, null, sectionId, null, null, null, null);
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.equal(result.data[0].resource_type, 'task', 'resource_typeが"task"であること');
+  });
+
+  test('getAllTasks() - 正常系(completed_since)', function (t) {
+    var projectId = common.projectId;
+    var completedSince = Utilities.formatDate(new Date(), 'JST', 'yyyy-MM-dd\'T\'HH:mm:ss\'+09:00\'');
+    var result = client.getAllTasks(null, projectId, null, null, completedSince, null);
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.equal(result.data[0].resource_type, 'task', 'resource_typeが"task"であること');
+  });
+
+  test('getAllTasks() - 正常系(modified_since)', function (t) {
+    var projectId = common.projectId;
+    var modifiedSince = Utilities.formatDate(new Date(), 'JST', 'yyyy-MM-dd\'T\'HH:mm:ss\'+09:00\'');
+    var result = client.getAllTasks(null, projectId, null, null, null, modifiedSince);
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(result.data.length == 0, '0件であること');
+  });
+
+  test('getAllTasks() - 正常系(paramsあり)', function (t) {
+    var projectId = common.projectId;
+    var limit = 1;
+    var result = client.getAllTasks(null, projectId, null, null, null, null, {limit: limit});
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(result.data.length === limit, '"limit"で指定した要素の数が取得できること');
+    t.equal(result.data[0].resource_type, 'task', 'resource_typeが"task"であること');
     t.ok(Object.prototype.hasOwnProperty.call(result, 'next_page'), '"next_page"を含むこと');
   });
 }
