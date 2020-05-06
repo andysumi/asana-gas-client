@@ -189,20 +189,24 @@ function getAllTasks(workspaceId, projectId, sectionId, userId, completedSince, 
 }
 
 /**
+ * 指定したTaskの情報を取得する<br>
+ * https://developers.asana.com/docs/get-a-task
+ * @param {string} taskId
+ * @param {?Object} params
+ *   @param {?boolean} params.opt_pretty
+ *   @param {?Array<string>} params.opt_fields
+ * @return {Object}
+ */
+function getSpecificTask(taskId, params) { // eslint-disable-line no-unused-vars
+  throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
+}
+
+/**
  * Project内のTaskを取得する
  * @param {?number} projectId 【任意】プロジェクトID
  * @return {Object} Taskのオブジェクト
  */
 function getTasksInProject(projectId) { // eslint-disable-line no-unused-vars
-  throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
-}
-
-/**
- * Taskの情報を取得する
- * @param {number} taskId 【必須】タスクID
- * @return {Object} Taskのオブジェクト
- */
-function getSpecificTask(taskId) { // eslint-disable-line no-unused-vars
   throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
 }
 

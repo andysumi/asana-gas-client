@@ -80,15 +80,14 @@
       if (modifiedSince) parameter['modified_since'] = modifiedSince;
       return this.fetch_(Utilities.formatString('/tasks?%s', this.buildUrlParam_(_.extend(parameter, params))), { 'method': 'get' });
     };
-
+    AsanaClient.prototype.getSpecificTask = function (taskId, params) {
+      if (!taskId) throw new Error('"taskId"は必須です');
+      return this.fetch_(Utilities.formatString('/tasks/%s?%s', taskId, this.buildUrlParam_(params)), { 'method': 'get' });
+    };
 
     AsanaClient.prototype.getTasksInProject = function (projectId) {
       var id = projectId || this.projectId;
       return this.fetch_(Utilities.formatString('/projects/%d/tasks', id), { 'method': 'get' });
-    };
-
-    AsanaClient.prototype.getSpecificTask = function (taskId) {
-      return this.fetch_(Utilities.formatString('/tasks/%d', taskId), { 'method': 'get' });
     };
 
     AsanaClient.prototype.searchTask = function (workspaceId, params) {

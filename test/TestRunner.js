@@ -26,6 +26,7 @@ function TestRunner_() { // eslint-disable-line no-unused-vars
     testGetStatusesFromProject_(test, common);
     // Task
     testGetAllTasks_(test, common);
+    testGetSpecificTask_(test, common);
     /***********************************************/
   } catch (err) {
     test('Exception occurred', function f(assert) {
@@ -317,5 +318,32 @@ function testGetAllTasks_(test, common) {
     t.ok(result.data.length === limit, '"limit"で指定した要素の数が取得できること');
     t.equal(result.data[0].resource_type, 'task', 'resource_typeが"task"であること');
     t.ok(Object.prototype.hasOwnProperty.call(result, 'next_page'), '"next_page"を含むこと');
+  });
+}
+
+function testGetSpecificTask_(test, common) {
+  var client = common.getClientUser();
+
+  test('getSpecificTask() - 異常系', function (t) {
+    t.throws(function () {
+      return client.getSpecificTask();
+    },
+    '"id"を指定していない場合はエラー');
+  });
+
+  test('getSpecificTask() - 正常系(paramsなし)', function (t) {
+    var id = common.taskId;
+    var result = client.getSpecificTask(id);
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.equal(result.data.resource_type, 'task', 'resource_typeが"task"であること');
+    t.equal(result.data.gid, id, 'idが正しいこと');
+  });
+
+  test('getSpecificTask() - 正常系(paramsあり)', function (t) {
+    var id = common.taskId;
+    var fields = ['name'];
+    var result = client.getSpecificTask(id, { opt_fields: fields});
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(Object.prototype.hasOwnProperty.call(result.data, fields[0]), '"opt_fields"で指定したfieldを含むこと');
   });
 }
