@@ -69,19 +69,41 @@
       return this.fetch_(Utilities.formatString('/projects/%s/project_statuses?%s', id, this.buildUrlParam_(params)), { 'method': 'get' });
     };
 
-    AsanaClient.prototype.getTasksInProject = function (projectId) {
+    // Tasks
+    AsanaClient.prototype.getAllTasks = function (workspaceId, projectId, sectionId, userId, completedSince, modifiedSince, params) {
+      var parameter = {};
+      if (workspaceId) parameter['workspace'] = workspaceId;
+      if (projectId) parameter['project'] = projectId;
+      if (sectionId) parameter['section'] = sectionId;
+      if (userId) parameter['assignee'] = userId;
+      if (completedSince) parameter['completed_since'] = completedSince;
+      if (modifiedSince) parameter['modified_since'] = modifiedSince;
+      return this.fetch_(Utilities.formatString('/tasks?%s', this.buildUrlParam_(_.extend(parameter, params))), { 'method': 'get' });
+    };
+    AsanaClient.prototype.getSpecificTask = function (taskId, params) {
+      if (!taskId) throw new Error('"taskId"は必須です');
+      return this.fetch_(Utilities.formatString('/tasks/%s?%s', taskId, this.buildUrlParam_(params)), { 'method': 'get' });
+    };
+    AsanaClient.prototype.getTasksInProject = function (projectId, params) {
       var id = projectId || this.projectId;
-      return this.fetch_(Utilities.formatString('/projects/%d/tasks', id), { 'method': 'get' });
+      return this.fetch_(Utilities.formatString('/projects/%s/tasks?%s', id, this.buildUrlParam_(params)), { 'method': 'get' });
     };
-
-    AsanaClient.prototype.getSpecificTask = function (taskId) {
-      return this.fetch_(Utilities.formatString('/tasks/%d', taskId), { 'method': 'get' });
+    AsanaClient.prototype.getTasksInSection = function (sectionId, params) {
+      if (!sectionId) throw new Error('"sectionId"は必須です');
+      return this.fetch_(Utilities.formatString('/sections/%s/tasks?%s', sectionId, this.buildUrlParam_(params)), { 'method': 'get' });
     };
-
-    AsanaClient.prototype.searchTask = function (workspaceId, params) {
+    AsanaClient.prototype.getTasksWithTag = function (tagId, params) {
+      if (!tagId) throw new Error('"tagId"は必須です');
+      return this.fetch_(Utilities.formatString('/tags/%s/tasks?%s', tagId, this.buildUrlParam_(params)), { 'method': 'get' });
+    };
+    AsanaClient.prototype.getSubTasksInTask = function (taskId, params) {
+      if (!taskId) throw new Error('"taskId"は必須です');
+      return this.fetch_(Utilities.formatString('/tasks/%s/subtasks?%s', taskId, this.buildUrlParam_(params)), { 'method': 'get' });
+    };
+    AsanaClient.prototype.searchTaskInWorkspace = function (workspaceId, keys, params) {
+      if (!keys) throw new Error('"keys"は必須です');
       var id = workspaceId || this.workspaceId;
-      var parameter = this.buildUrlParam_(params);
-      return this.fetch_(Utilities.formatString('/workspaces/%d/tasks/search?%s', id, parameter), { 'method': 'get' });
+      return this.fetch_(Utilities.formatString('/workspaces/%s/tasks/search?%s', id, this.buildUrlParam_(_.extend(keys, params))), { 'method': 'get' });
     };
 
     AsanaClient.prototype.buildUrlParam_ = function (params) {

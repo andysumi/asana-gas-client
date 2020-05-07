@@ -169,30 +169,110 @@ function getStatusesFromProject(projectId, params) { // eslint-disable-line no-u
 }
 
 /**
- * Project内のTaskを取得する
- * @param {?number} projectId 【任意】プロジェクトID
- * @return {Object} Taskのオブジェクト
+ * 指定した条件に該当するTaskを取得する<br>
+ * https://developers.asana.com/docs/get-multiple-tasks
+ * @param {?string} workspaceId
+ * @param {?string} projectId
+ * @param {?string} sectionId
+ * @param {?string} userId
+ * @param {?string} completedSince date-time
+ * @param {?string} modifiedSince date-time
+ * @param {?Object} params
+ *   @param {?boolean} params.opt_pretty
+ *   @param {?Array<string>} params.opt_fields
+ *   @param {?number} params.limit
+ *   @param {?string} params.offset
+ * @return {Object}
  */
-function getTasksInProject(projectId) { // eslint-disable-line no-unused-vars
+function getAllTasks(workspaceId, projectId, sectionId, userId, completedSince, modifiedSince, params) { // eslint-disable-line no-unused-vars
   throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
 }
 
 /**
- * Taskの情報を取得する
- * @param {number} taskId 【必須】タスクID
- * @return {Object} Taskのオブジェクト
+ * 指定したTaskの情報を取得する<br>
+ * https://developers.asana.com/docs/get-a-task
+ * @param {string} taskId
+ * @param {?Object} params
+ *   @param {?boolean} params.opt_pretty
+ *   @param {?Array<string>} params.opt_fields
+ * @return {Object}
  */
-function getSpecificTask(taskId) { // eslint-disable-line no-unused-vars
+function getSpecificTask(taskId, params) { // eslint-disable-line no-unused-vars
   throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
 }
 
 /**
- * Taskを検索する
- * https://asana.com/developers/documentation/getting-started/search-api
- * @param {?number} workspaceId 【任意】ワークスペースID
- * @param {Object} params 【必須】パラメーター
- * @return {Object} Taskのオブジェクト
+ * 指定したProject内のTaskを取得する<br>
+ * https://developers.asana.com/docs/get-tasks-from-a-project
+ * @param {?string} projectId
+ * @param {?Object} params
+ *   @param {?boolean} params.opt_pretty
+ *   @param {?Array<string>} params.opt_fields
+ *   @param {?number} params.limit
+ *   @param {?string} params.offset
+ * @return {Object}
  */
-function searchTask(workspaceId, params) { // eslint-disable-line no-unused-vars
+function getTasksInProject(projectId, params) { // eslint-disable-line no-unused-vars
+  throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
+}
+
+/**
+ * 指定したSection内のTaskを取得する<br>
+ * https://developers.asana.com/docs/get-tasks-from-a-section
+ * @param {string} sectionId
+ * @param {?Object} params
+ *   @param {?boolean} params.opt_pretty
+ *   @param {?Array<string>} params.opt_fields
+ *   @param {?number} params.limit
+ *   @param {?string} params.offset
+ * @return {Object}
+ */
+function getTasksInSection(sectionId, params) { // eslint-disable-line no-unused-vars
+  throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
+}
+
+/**
+ * 指定したTagを持つTaskを取得する<br>
+ * https://developers.asana.com/docs/get-tasks-from-a-tag
+ * @param {string} tagId
+ * @param {?Object} params
+ *   @param {?boolean} params.opt_pretty
+ *   @param {?Array<string>} params.opt_fields
+ *   @param {?number} params.limit
+ *   @param {?string} params.offset
+ * @return {Object}
+ */
+function getTasksWithTag(tagId, params) { // eslint-disable-line no-unused-vars
+  throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
+}
+
+/**
+ * 指定したTask内のSubTaskを取得する<br>
+ * https://developers.asana.com/docs/get-subtasks-from-a-task
+ * @param {string} taskId
+ * @param {?Object} params
+ *   @param {?boolean} params.opt_pretty
+ *   @param {?Array<string>} params.opt_fields
+ *   @param {?number} params.limit
+ *   @param {?string} params.offset
+ * @return {Object}
+ */
+function getSubTasksInTask(taskId, params) { // eslint-disable-line no-unused-vars
+  throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
+}
+
+/**
+ * 指定したWorkspace内のTaskを検索する<br>
+ * https://developers.asana.com/docs/search-tasks-in-a-workspace
+ * @param {?string} workspaceId
+ * @param {Object} keys ドキュメント参照
+ * @param {?Object} params
+ *   @param {?boolean} params.opt_pretty
+ *   @param {?Array<string>} params.opt_fields
+ *   @param {?number} params.limit
+ *   @param {?string} params.offset
+ * @return {Object}
+ */
+function searchTaskInWorkspace(workspaceId, keys, params) { // eslint-disable-line no-unused-vars
   throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
 }
