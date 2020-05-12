@@ -106,6 +106,16 @@
       return this.fetch_(Utilities.formatString('/workspaces/%s/tasks/search?%s', id, this.buildUrlParam_(_.extend(keys, params))), { 'method': 'get' });
     };
 
+    // Sections
+    AsanaClient.prototype.getSpecificSection = function (sectionId, params) {
+      if (!sectionId) throw new Error('"sectionId"は必須です');
+      return this.fetch_(Utilities.formatString('/sections/%s?%s', sectionId, this.buildUrlParam_(params)), { 'method': 'get' });
+    };
+    AsanaClient.prototype.getSectionsInProject = function (projectId, params) {
+      var id = projectId || this.projectId;
+      return this.fetch_(Utilities.formatString('/projects/%s/sections?%s', id, this.buildUrlParam_(params)), { 'method': 'get' });
+    };
+
     AsanaClient.prototype.buildUrlParam_ = function (params) {
       if (!params) return '';
 
