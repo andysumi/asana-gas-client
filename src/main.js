@@ -289,3 +289,18 @@ function searchTaskInWorkspace(workspaceId, keys, params) { // eslint-disable-li
 function getSpecificSection(sectionId, params) { // eslint-disable-line no-unused-vars
   throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
 }
+
+/**
+ * 指定したProject内のSectionを取得する<br>
+ * https://developers.asana.com/docs/get-sections-in-a-project
+ * @param {?string} projectId
+ * @param {?Object} params
+ *   @param {?boolean} params.opt_pretty
+ *   @param {?Array<string>} params.opt_fields
+ *   @param {?number} params.limit
+ *   @param {?string} params.offset
+ * @return {Object}
+ */
+function getSectionsInProject(projectId, params) { // eslint-disable-line no-unused-vars
+  throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
+}
