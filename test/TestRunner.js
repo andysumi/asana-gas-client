@@ -32,6 +32,8 @@ function TestRunner_() { // eslint-disable-line no-unused-vars
     testGetTasksWithTag_(test, common);
     testGetSubTasksInTask_(test, common);
     testSearchTaskInWorkspace_(test, common);
+    // Section
+    testGetSpecificSection_(test, common);
     /***********************************************/
   } catch (err) {
     test('Exception occurred', function f(assert) {
@@ -619,5 +621,32 @@ function testSearchTaskInWorkspace_(test, common) {
     t.ok(result instanceof Object, 'Objectで取得できること');
     t.ok(Object.prototype.hasOwnProperty.call(result.data[0], fields[0]), '"opt_fields"で指定したfieldを含むこと');
     t.ok(result.data.length === limit, '"limit"で指定した要素の数が取得できること');
+  });
+}
+
+function testGetSpecificSection_(test, common) {
+  var client = common.getClientUser();
+
+  test('getSpecificSection() - 異常系(引数なし)', function (t) {
+    t.throws(function () {
+      return client.getSpecificSection();
+    },
+    '"id"を指定していない場合はエラー');
+  });
+
+  test('getSpecificSection() - 正常系(sectionId)', function (t) {
+    var id = common.sectionId;
+    var result = client.getSpecificSection(id);
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.equal(result.data.resource_type, 'section', 'resource_typeが"section"であること');
+    t.equal(result.data.gid, id, 'idが正しいこと');
+  });
+
+  test('getSpecificSection() - 正常系(params)', function (t) {
+    var id = common.sectionId;
+    var fields = ['name'];
+    var result = client.getSpecificSection(id, { opt_pretty: true, opt_fields: fields });
+    t.ok(result instanceof Object, 'Objectで取得できること');
+    t.ok(Object.prototype.hasOwnProperty.call(result.data, fields[0]), '"opt_fields"で指定したfieldを含むこと');
   });
 }

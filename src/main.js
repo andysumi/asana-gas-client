@@ -276,3 +276,16 @@ function getSubTasksInTask(taskId, params) { // eslint-disable-line no-unused-va
 function searchTaskInWorkspace(workspaceId, keys, params) { // eslint-disable-line no-unused-vars
   throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
 }
+
+/**
+ * 指定したSectionの情報を取得する<br>
+ * https://developers.asana.com/docs/get-a-section
+ * @param {string} sectionId
+ * @param {?Object} params
+ *   @param {?boolean} params.opt_pretty
+ *   @param {?Array<string>} params.opt_fields
+ * @return {Object}
+ */
+function getSpecificSection(sectionId, params) { // eslint-disable-line no-unused-vars
+  throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
+}
