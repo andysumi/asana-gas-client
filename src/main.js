@@ -304,3 +304,34 @@ function getSpecificSection(sectionId, params) { // eslint-disable-line no-unuse
 function getSectionsInProject(projectId, params) { // eslint-disable-line no-unused-vars
   throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
 }
+
+/**
+ * 指定したタスクにコメントする<br>
+ * https://developers.asana.com/docs/create-a-story-on-a-task
+ * @param {string} taskId
+ * @param {string} text
+ * @param {string} htmlText
+ * @param {?boolean} isPinned
+ * @param {Object} params
+ *    @param {?boolean} params.optPretty
+ *    @param {?Array<string>} params.optFields
+ * @return {Object}
+ */
+ function postCommentToTask(taskId, text, htmlText, isPinned, params) { // eslint-disable-line no-unused-vars
+  throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
+}
+
+/**
+ * 指定したタスクにステッカーを送る<br>
+ * https://developers.asana.com/docs/create-a-story-on-a-task
+ * @param {string} taskId
+ * @param {string} stickerName
+ * @param {?boolean} isPinned
+ * @param {Object} params
+ *    @param {?boolean} params.optPretty
+ *    @param {?Array<string>} params.optFields
+ * @return {Object}
+ */
+ function postStickerToTask(taskId, stickerName, isPinned, params) { // eslint-disable-line no-unused-vars
+  throw new Error('このメソッドは直接呼び出せません。createメソッドで取得したインスタンスより呼び出してください。');
+}
