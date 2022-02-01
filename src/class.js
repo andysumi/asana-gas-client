@@ -116,6 +116,21 @@
       return this.fetch_(Utilities.formatString('/projects/%s/sections?%s', id, this.buildUrlParam_(params)), { 'method': 'get' });
     };
 
+    // Story
+    AsanaClient.prototype.postCommentToTask = function (taskId, text, htmlText, isPinned, params) {
+      if (!taskId) throw new Error('"taskId"は必須です');
+      if (!text || !htmlText) throw new Error('"text"または"htmlText"は必須です');
+
+      var body = {
+        "data": {
+          "html_text": htmlText,
+          "is_pinned": isPinned,
+          "text": text
+        }
+      }
+      return this.fetch_(Utilities.formatString('/tasks/%s/stories?%s', taskId, this.buildUrlParam_(params)), { 'method' : 'post', 'payload': body });
+    };
+
     AsanaClient.prototype.buildUrlParam_ = function (params) {
       if (!params) return '';
 
