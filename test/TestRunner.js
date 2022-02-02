@@ -35,6 +35,7 @@ function TestRunner_() { // eslint-disable-line no-unused-vars
     // Section
     testGetSpecificSection_(test, common);
     testGetSectionsInProject_(test, common);
+    testPostCommentToTask_(test, common);
     /***********************************************/
   } catch (err) {
     test('Exception occurred', function f(assert) {
@@ -677,5 +678,38 @@ function testGetSectionsInProject_(test, common) {
     t.ok(Object.prototype.hasOwnProperty.call(result.data[0], fields[0]), '"opt_fields"で指定したfieldを含むこと');
     t.ok(result.data.length === limit, '"limit"で指定した要素の数が取得できること');
     t.ok(Object.prototype.hasOwnProperty.call(result, 'next_page'), '"next_page"を含むこと');
+  });
+}
+
+function testPostCommentToTask_(test, common) {
+  var client = common.getClientUser();
+  var taskId = common.taskId
+
+  test('postCommentToTask() - 異常系(引数のtaskIdなし)', function (t) {
+    t.throws(function () {
+      return client.postCommentToTask(null, 'テスト', '<body>htmlテキスト.</body>');
+    },
+    '"taskId"を指定していない場合はエラー');
+  });
+
+  test('postCommentToTask() - 異常系(引数のtextとhtmlTextなし)', function (t) {
+    t.throws(function () {
+      return client.postCommentToTask(taskId, null, null);
+    },
+    '"text"と"htmlText"の両方を指定していない場合はエラー');
+  });
+
+  test('postCommentToTask() - 正常系(引数のtaskIdとtextあり)', function (t) {
+    var result = client.postCommentToTask(taskId, 'テスト', null, true);
+    t.equal(result.data.gid, taskId, '指定したタスクにコメントが追加されること');
+    t.equal(result.data.text, 'テスト', 'コメントのtextが正しいこと');
+    t.equal(result.data.is_pinned, true, 'コメントのisPinnedがただしいこと');
+  });
+
+  test('postCommentToTask() - 正常系(引数のtaskIdとhtmlTextあり)', function (t) {
+    var result = client.postCommentToTask(taskId, null, '<body>htmlテキスト.</body>', false);
+    t.equal(result.data.gid, taskId, '指定したタスクにhtmlのコメントが追加されること');
+    t.equal(result.data.html_text, '<body>htmlテキスト.</body>', 'コメントのhtmlTextが正しいこと');
+    t.equal(result.data.is_pinned, false, 'コメントのisPinnedがただしいこと');
   });
 }
