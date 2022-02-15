@@ -1,6 +1,6 @@
 /* global TestCommon_ */
 
-function TestRunner_() { // eslint-disable-line no-unused-vars
+function TestRunner() { // eslint-disable-line no-unused-vars
   if ((typeof GasTap) === 'undefined') { // GasT Initialization. (only if not initialized yet.)
     eval(UrlFetchApp.fetch('https://raw.githubusercontent.com/zixia/gast/master/src/gas-tap-lib.js').getContentText());
   } // Class GasTap is ready for use now!
@@ -35,6 +35,7 @@ function TestRunner_() { // eslint-disable-line no-unused-vars
     // Section
     testGetSpecificSection_(test, common);
     testGetSectionsInProject_(test, common);
+    // Story
     testPostCommentToTask_(test, common);
     /***********************************************/
   } catch (err) {
@@ -700,16 +701,14 @@ function testPostCommentToTask_(test, common) {
   });
 
   test('postCommentToTask() - 正常系(引数のtaskIdとtextあり)', function (t) {
-    var result = client.postCommentToTask(taskId, 'テスト', null, true);
-    t.equal(result.data.gid, taskId, '指定したタスクにコメントが追加されること');
+    var result = client.postCommentToTask(taskId, 'planeテキスト', null, true);
     t.equal(result.data.text, 'テスト', 'コメントのtextが正しいこと');
     t.equal(result.data.is_pinned, true, 'コメントのisPinnedがただしいこと');
   });
 
   test('postCommentToTask() - 正常系(引数のtaskIdとhtmlTextあり)', function (t) {
-    var result = client.postCommentToTask(taskId, null, '<body>htmlテキスト.</body>', false);
-    t.equal(result.data.gid, taskId, '指定したタスクにhtmlのコメントが追加されること');
-    t.equal(result.data.html_text, '<body>htmlテキスト.</body>', 'コメントのhtmlTextが正しいこと');
+    var result = client.postCommentToTask(taskId, null, '<body><strong>html</strong><em>テキスト</em></body>', false);
+    t.equal(result.data.text, 'htmlテキスト', 'コメントのhtmlTextが正しいこと');
     t.equal(result.data.is_pinned, false, 'コメントのisPinnedがただしいこと');
   });
 }
