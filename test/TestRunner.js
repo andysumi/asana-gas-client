@@ -1,6 +1,6 @@
 /* global TestCommon_ */
 
-function TestRunner_() { // eslint-disable-line no-unused-vars
+function TestRunner() { // eslint-disable-line no-unused-vars
   if ((typeof GasTap) === 'undefined') { // GasT Initialization. (only if not initialized yet.)
     eval(UrlFetchApp.fetch('https://raw.githubusercontent.com/zixia/gast/master/src/gas-tap-lib.js').getContentText());
   } // Class GasTap is ready for use now!
@@ -35,6 +35,9 @@ function TestRunner_() { // eslint-disable-line no-unused-vars
     // Section
     testGetSpecificSection_(test, common);
     testGetSectionsInProject_(test, common);
+    // Story
+    testPostCommentToTask_(test, common);
+    testPostStickerToTask_(test, common);
     /***********************************************/
   } catch (err) {
     test('Exception occurred', function f(assert) {
@@ -677,5 +680,61 @@ function testGetSectionsInProject_(test, common) {
     t.ok(Object.prototype.hasOwnProperty.call(result.data[0], fields[0]), '"opt_fields"で指定したfieldを含むこと');
     t.ok(result.data.length === limit, '"limit"で指定した要素の数が取得できること');
     t.ok(Object.prototype.hasOwnProperty.call(result, 'next_page'), '"next_page"を含むこと');
+  });
+}
+
+function testPostCommentToTask_(test, common) {
+  var client = common.getClientUser();
+  var taskId = common.taskId
+
+  test('postCommentToTask() - 異常系(引数のtaskIdなし)', function (t) {
+    t.throws(function () {
+      return client.postCommentToTask(null, 'テスト', '<body>htmlテキスト.</body>');
+    },
+    '"taskId"を指定していない場合はエラー');
+  });
+
+  test('postCommentToTask() - 異常系(引数のtextとhtmlTextなし)', function (t) {
+    t.throws(function () {
+      return client.postCommentToTask(taskId, null, null);
+    },
+    '"text"と"htmlText"の両方を指定していない場合はエラー');
+  });
+
+  test('postCommentToTask() - 正常系(引数のtaskIdとtextあり)', function (t) {
+    var result = client.postCommentToTask(taskId, 'planeテキスト', null, true);
+    t.equal(result.data.text, 'planeテキスト', 'コメントのtextが正しいこと');
+    t.equal(result.data.is_pinned, true, 'コメントのisPinnedがただしいこと');
+  });
+
+  test('postCommentToTask() - 正常系(引数のtaskIdとhtmlTextあり)', function (t) {
+    var result = client.postCommentToTask(taskId, null, '<body><strong>html</strong><em>テキスト</em></body>', false);
+    t.equal(result.data.text, 'htmlテキスト', 'コメントのhtmlTextが正しいこと');
+    t.equal(result.data.is_pinned, false, 'コメントのisPinnedがただしいこと');
+  });
+}
+
+function testPostStickerToTask_(test, common) {
+  var client = common.getClientUser();
+  var taskId = common.taskId
+
+  test('postStickerToTask() - 異常系(引数のtaskIdなし)', function (t) {
+    t.throws(function () {
+      return client.postStickerToTask(null, 'dancing_unicorn');
+    },
+    '"taskId"を指定していない場合はエラー');
+  });
+
+  test('postStickerToTask() - 異常系(引数のstickerNameなし)', function (t) {
+    t.throws(function () {
+      return client.postStickerToTask(taskId, null);
+    },
+    '"stickerName"を指定していない場合はエラー');
+  }); 
+
+  test('postStickerToTask() - 正常系(引数のtaskIdとstickerNameあり)', function (t) {
+    var result = client.postStickerToTask(taskId, 'dancing_unicorn', true);
+    t.equal(result.data.sticker_name, 'dancing_unicorn', '正しいステッカーがポストされること');
+    t.equal(result.data.is_pinned, true, 'コメントのisPinnedがただしいこと');
   });
 }

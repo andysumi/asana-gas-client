@@ -116,6 +116,25 @@
       return this.fetch_(Utilities.formatString('/projects/%s/sections?%s', id, this.buildUrlParam_(params)), { 'method': 'get' });
     };
 
+    // Story
+    AsanaClient.prototype.postCommentToTask = function (taskId, text, htmlText, isPinned, params) {
+      if (!taskId) throw new Error('"taskId"は必須です');
+      if (!text && !htmlText) throw new Error('"text"または"htmlText"は必須です');
+
+      var body = { 'data': { 'is_pinned': isPinned }};
+      if (text) body['data']['text'] = text;
+      if (htmlText) body['data']['html_text'] = htmlText;
+      return this.fetch_(Utilities.formatString('/tasks/%s/stories?%s', taskId, this.buildUrlParam_(params)), { 'method' : 'post', 'payload': body });
+    };
+
+    AsanaClient.prototype.postStickerToTask = function (taskId, stickerName, isPinned, params) {
+      if (!taskId) throw new Error('"taskId"は必須です');
+      if (!stickerName) throw new Error('"stickerName"は必須です');
+
+      var body = { 'data': { 'is_pinned': isPinned, 'sticker_name': stickerName}};
+      return this.fetch_(Utilities.formatString('/tasks/%s/stories?%s', taskId, this.buildUrlParam_(params)), { 'method' : 'post', 'payload': body });
+    };
+
     AsanaClient.prototype.buildUrlParam_ = function (params) {
       if (!params) return '';
 
@@ -133,8 +152,9 @@
         muteHttpExceptions: true,
         contentType       : 'application/json; charset=utf-8',
         headers           : this.headers,
-        payload           : options.payload || {}
+        payload           : JSON.stringify(options.payload)
       });
+
       try {
         return JSON.parse(response.getContentText('utf-8'));
       } catch (err) {
