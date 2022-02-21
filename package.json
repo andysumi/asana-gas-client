@@ -19,8 +19,8 @@
   },
   "homepage": "https://github.com/andysumi/asana-gas-client#readme",
   "devDependencies": {
-    "@google/clasp": "^2.3.0",
-    "eslint": "^6.8.0",
-    "eslint-plugin-googleappsscript": "^1.0.3"
+    "@google/clasp": "^2.4.1",
+    "eslint": "^8.9.0",
+    "eslint-plugin-googleappsscript": "^1.0.4"
   }
 }
